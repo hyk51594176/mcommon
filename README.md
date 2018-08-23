@@ -3,17 +3,17 @@
 
 #### CommonJS
 ```javascript
-npm install mCommon 
+npm install mcommon 
 
 import Vue from 'vue'
 
 import Element from 'element-ui'
 
-import mCommon from 'mCommon'
+import mcommon from 'mcommon'
 
 Vue.use(Element)
 
-Vue.use(mCommon)
+Vue.use(mcommon)
 ```
 #### UMD
 ```html
