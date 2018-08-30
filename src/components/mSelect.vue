@@ -6,9 +6,9 @@
     :filterable='filterable'
     :clearable='clearable'
     :remote-method='remoteMethod'
-    @change="change"
     :multiple='multiple'
     @clear='remoteMethod'
+    v-on='$listeners'
     v-bind="$attrs">
     <el-option
       v-for="item in list"
@@ -23,7 +23,7 @@
 <script>
 
 export default {
-  name:'m-select',
+  name: 'm-select',
   props: {
     params: {
       type: Object,
@@ -59,7 +59,6 @@ export default {
     showMsg: Boolean,
     getList: Function
   },
-  name: 'mSelect',
   data () {
     return {
       list: [],
@@ -144,10 +143,6 @@ export default {
         if (flag && !this.nullRequest) return
       }
       this.getData()
-    },
-    change (v) {
-      this.$emit('input', v)
-      this.$emit('change', v)
     },
     getCurrentObj () {
       if (!this.list.length) return

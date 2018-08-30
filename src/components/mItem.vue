@@ -1,9 +1,8 @@
 <template>
   <el-input
     v-if="column.el==='input'"
-    @change='inputChange($event,column.prop)'
     v-model="modelComputed"
-    v-bind="column"
+    v-bind="column" v-on="column.listeners"
     @keyup.enter.native.stop='inputEnter(column.prop)'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
     <div v-if="column.append" slot="append" :class="column.appendClass">
@@ -16,7 +15,7 @@
   </el-input>
   <el-select
     v-model="modelComputed"
-    v-bind="column"
+    v-bind="column" v-on="column.listeners"
     filterable
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
     v-else-if="column.el==='select'">
@@ -24,44 +23,42 @@
     </el-option>
   </el-select>
   <el-date-picker
-    v-model="modelComputed" v-bind="column"
+    v-model="modelComputed" v-bind="column" v-on="column.listeners"
     :default-time='column.defaultTime||defaultTime'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
     :picker-options="column.pickerOptions||getpickerOptions(column.type,column.isNeedFast)"
     v-else-if="column.el==='date-picker'">
   </el-date-picker>
-  <el-input-number v-model="modelComputed" v-bind="column" v-else-if="column.el==='input-number'" />
+  <el-input-number v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="column.el==='input-number'" />
   <el-checkbox
-    v-model="modelComputed" v-bind="column"
+    v-model="modelComputed" v-bind="column" v-on="column.listeners"
     v-else-if="column.el==='checkbox'">
     {{column.Text}}
   </el-checkbox>
-  <el-checkbox-group v-model="modelComputed" v-bind="column" v-else-if="column.el==='checkbox-group'">
+  <el-checkbox-group v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="column.el==='checkbox-group'">
     <el-checkbox
       :label="column.props?item[column.props.value]:item[valueKey.value]"
-      v-for='item in column.dataList' :key='item[valueKey.label]' v-bind="column">
+      v-for='item in column.dataList' :key='item[valueKey.label]' v-bind="column" v-on="column.listeners">
       {{column.props?item[column.props.label]:item[valueKey.label]}}
     </el-checkbox>
   </el-checkbox-group>
-  <el-radio-group v-model="modelComputed" v-else-if="column.el==='radio'" v-bind="column">
+  <el-radio-group v-model="modelComputed" v-else-if="column.el==='radio'" v-bind="column" v-on="column.listeners">
     <el-radio
-      :label="column.props?item[column.props.value]:item[valueKey.value]" v-bind="column"
+      :label="column.props?item[column.props.value]:item[valueKey.value]" v-bind="column" v-on="column.listeners"
       v-for='item in column.dataList'
       :key='item[valueKey.label]'>
       {{column.props?item[column.props.label]:item[valueKey.label]}}
     </el-radio>
   </el-radio-group>
   <el-cascader
-    v-model="modelComputed" v-bind="column" filterable
+    v-model="modelComputed" v-bind="column" v-on="column.listeners" filterable
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
     @active-item-change='btnClick({data:row,column,$event})' v-else-if="column.el==='cascader'">
   </el-cascader>
-  <el-switch v-model="modelComputed" v-bind="column" v-else-if="column.el==='switch'">
+  <el-switch v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="column.el==='switch'">
   </el-switch>
   <m-select
-    v-else-if="column.el==='mSelect'" v-bind="column" v-model="modelComputed"
-    @currentObj='currentObj($event,column.prop)'
-    @selectList='selectList($event,column.prop)' :params='getParams(column)'></m-select>
+    v-else-if="column.el==='mSelect'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
   <el-tag :type="column.type" v-else-if="column.el==='tag'">{{modelComputed}}</el-tag>
   <span v-else style="display:inline-block;height: 36px;vertical-align: top;line-height: 36px;padding-left: 12px;">{{modelComputed}}</span>
 </template>
@@ -211,21 +208,16 @@ export default {
         return pickerOptions
       }
     },
-    btnClick (obj) {
-      this.$emit('btnClick', obj)
-    },
     currentObj (data, key) {
+      if (this.column.listeners && this.column.listeners.currentObj) return
       this.$emit('currentObj', data, key)
     },
-    inputChange (data, key) {
-      this.$emit('inputChange', data, key)
-    },
+
     inputEnter (key) {
+      if (this.column.listeners && this.column.listeners.inputEnter) return
       this.$emit('inputEnter', key)
     },
-    selectList (data, key) {
-      this.$emit('selectList', data, key)
-    }
+  
   }
 }
 </script>
