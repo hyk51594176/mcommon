@@ -5,13 +5,13 @@
       :border='border'
       :stripe="stripe"
       :summary-method='summarymethod||summaryDefault'
-      :show-summary='showsummary||columns.some(obj=>obj.isSummary)'
+      :show-summary='isShowSummary'
       @row-click='rowClick'
       @cell-click='cellClick'
       @selection-change="handleSelectionChange"
       @sort-change='sortChange'
       @current-change="currentChange"
-      ref='commontable' v-bind="$attrs">
+      ref='commontable' v-bind="$attrs" v-on="$listeners">
       <el-table-column type="expand" v-if='expand'>
         <template slot-scope='scope'>
           <slot name='expand' :row='scope.row' :$index='scope.$index'>
@@ -43,10 +43,8 @@
                 {{scope.row[obj.prop]===true?obj.trueLabel:obj.falseLabel}}
               </span>
               <m-item
-                :column='getColumns(obj,scope.row)'
-                @btnClick='btnClick'
+                :column='getColumns(obj,scope)'
                 @currentObj='(data,key)=>currentObj(scope,data,key)'
-                @selectList='selectList' @inputEnter='inputEnter(scope.row,$event)'
                 :row='scope.row' v-else />
             </slot>
           </template>
@@ -153,6 +151,9 @@ export default {
     },
     summaryProps () {
       return this.columns.filter(obj => obj.isSummary).map(item => item.prop)
+    },
+    isShowSummary () {
+      return this.columns.some(obj => obj.isSummary)
     }
   },
   watch: {
@@ -165,11 +166,21 @@ export default {
       if (this.forced) return (str || '') + (Math.random() * Date.now())
       return str
     },
-    getColumns (obj, row) {
+    getColumns (obj, scope) {
+      let listeners = null
+      if (obj.listeners) {
+        listeners = Object.keys(obj.listeners).reduce((x, y) => {
+          return {
+            ...x,
+            [y]: obj.listeners[y].bind(null, scope)
+          }
+        }, {})
+      }
       return {
         ...obj,
-        disabled: obj.disabled || row.disabled,
-        readonly: obj.readonly || row.readonly
+        disabled: obj.disabled || scope.row.disabled,
+        readonly: obj.readonly || scope.row.readonly,
+        listeners
       }
     },
     summaryDefault (param) {
@@ -223,37 +234,37 @@ export default {
       this.$refs.commontable.clearSelection()
     },
     handleSelectionChange (arr) {
+      if (this.$listeners['selection-change']) return
       this.$emit('selectionChange', arr)
     },
     sortChange (sortObj) {
+      if (this.$listeners['sort-change']) return
       this.$emit('sortChange', sortObj)
     },
     rowClick (row, event, column) {
+      if (this.$listeners['row-click']) return
       this.$emit('rowClick', row, event, column)
     },
     cellClick (row, event, column) {
+      if (this.$listeners['cell-click']) return
       this.$emit('cellClick', row, event, column)
     },
     currentChange (val) {
+      if (this.$listeners['current-change']) return
       this.$emit('currentChange', val)
     },
     filtetag (column, value, row) {
-      return row[column.prop] === value
+      if (typeof column.filterMethod === 'function') {
+        return column.filterMethod(column, value, row)
+      } else {
+        return row[column.prop] === value
+      }
     },
     goto (obj) {
       this.$emit('gotolink', obj)
     },
-    btnClick (obj) {
-      this.$emit('btnClick', obj)
-    },
     currentObj (scope, data, key) {
       this.$emit('currentObj', scope.row, data, key, scope.$index)
-    },
-    selectList (data, key) {
-      this.$emit('selectList', data, key)
-    },
-    inputEnter (data, key) {
-      this.$emit('inputEnter', data, key)
     }
   }
 }

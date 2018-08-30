@@ -1,10 +1,9 @@
 <template>
   <el-form class="coustm" :model="formData" ref='ruleForm' :label-width="labelWidth" v-bind="$attrs">
-    <el-col :span="nowrap? 22:(column.span||11)" v-for="column in columns" :key='column.prop'>
+    <el-col :span="($store.getters.isMobile && !noWrap)? 22:(column.span||11)" v-for="column in columns" :key='column.prop'>
       <el-form-item v-bind="column" :label-width="!column.label?'10px':column.labelWidth||labelWidth">
         <slot :name='column.prop' :column='column'>
-          <m-item :column='column' @btnClick='btnClick' @currentObj='currentObj' @selectList='selectList'
-                 :row='formData' @inputChange='inputChange' @inputEnter='inputEnter'>
+          <m-item :column='column'  :row='formData'   >
             <template v-if='column.el==="input"&&column.append&&column.appendCustom' :slot="column.prop+'_append'">
               <slot :name="column.prop+'_append'"></slot>
             </template>
@@ -24,20 +23,19 @@ export default {
         return {}
       }
     },
-    nowrap: Boolean,
+    noWrap: Boolean,
     labelWidth: {
       type: String,
       default: '100px'
     },
     columns: Array,
-    size: String,
+    size: String
   },
   watch: {
     formData (v, ov) {
       if (v !== ov) this.$nextTick(_ => this.clearValidate())
     }
   },
-  
   methods: {
     validate (fn) {
       if (this.$refs.ruleForm) return this.$refs.ruleForm.validate(fn)
@@ -50,9 +48,6 @@ export default {
     },
     clearValidate (propsArr) {
       if (this.$refs.ruleForm) return this.$refs.ruleForm.clearValidate(propsArr)
-    },
-    btnClick (obj) {
-      this.$emit('btnClick', obj)
     },
     currentObj (data, key) {
       this.$emit('currentObj', data, key)
