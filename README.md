@@ -7,11 +7,7 @@ npm install mcommon
 
 import Vue from 'vue'
 
-import Element from 'element-ui'
-
 import mcommon from 'mcommon'
-
-Vue.use(Element)
 
 Vue.use(mcommon)
 ```

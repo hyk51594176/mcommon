@@ -64,8 +64,8 @@
 </template>
 <script>
 export default {
+  name: 'm-table',
   props: {
-    name: 'm-table',
     tableData: {
       type: Array,
       default () {
