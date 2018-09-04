@@ -38,13 +38,13 @@
   <el-checkbox-group v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="column.el==='checkbox-group'">
     <el-checkbox
       :label="column.props?item[column.props.value]:item[valueKey.value]"
-      v-for='item in column.dataList' :key='item[valueKey.label]' v-bind="column" v-on="column.listeners">
+      v-for='item in column.dataList' :key='item[valueKey.label]' v-bind="column" >
       {{column.props?item[column.props.label]:item[valueKey.label]}}
     </el-checkbox>
   </el-checkbox-group>
   <el-radio-group v-model="modelComputed" v-else-if="column.el==='radio'" v-bind="column" v-on="column.listeners">
     <el-radio
-      :label="column.props?item[column.props.value]:item[valueKey.value]" v-bind="column" v-on="column.listeners"
+      :label="column.props?item[column.props.value]:item[valueKey.value]" v-bind="column"
       v-for='item in column.dataList'
       :key='item[valueKey.label]'>
       {{column.props?item[column.props.label]:item[valueKey.label]}}
