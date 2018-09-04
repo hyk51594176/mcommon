@@ -60,7 +60,7 @@
   <m-select
     v-else-if="column.el==='mSelect'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
   <el-tag :type="column.type" v-else-if="column.el==='tag'">{{modelComputed}}</el-tag>
-  <span v-else style="display:inline-block;height: 36px;vertical-align: top;line-height: 36px;padding-left: 12px;">{{modelComputed}}</span>
+  <span v-else >{{modelComputed}}</span>
 </template>
 <script>
 const pickerOptions = {
