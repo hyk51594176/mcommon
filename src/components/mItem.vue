@@ -120,6 +120,7 @@ const pickerOptions = {
     }
   }]
 }
+const eval2 = eval
 export default {
   name: 'm-item',
   props: {
@@ -145,7 +146,7 @@ export default {
         /* eslint-disable no-eval */
         let val
         try {
-          val = eval(`this.row.${this.column.prop}`)
+          val = eval2(`this.row.${this.column.prop}`)
         } catch (error) {
           throw new Error(`formData 没有${this.column.prop}属性`)
         }
@@ -153,7 +154,7 @@ export default {
       },
       set (value) {
         try {
-          eval(`this.row.${this.column.prop} = value`)
+          eval2(`this.row.${this.column.prop} = value`)
         } catch (error) {
           throw new Error(`formData 没有${this.column.prop}属性`)
         }
@@ -196,7 +197,7 @@ export default {
         for (let key in obj.params) {
           let value
           try {
-            value = eval(`this.row.${obj.params[key]}`)
+            value = eval2(`this.row.${obj.params[key]}`)
           } catch (err) { }
           newObj[key] = value !== undefined ? value : obj.params[key]
         }
