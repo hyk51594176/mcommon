@@ -143,7 +143,6 @@ export default {
     },
     modelComputed: {
       get () {
-        /* eslint-disable no-eval */
         let val = null
         if (this.column.prop && this.row) {
           let arr = this.column.prop.split('.')
