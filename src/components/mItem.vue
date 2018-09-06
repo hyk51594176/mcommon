@@ -120,6 +120,7 @@ const pickerOptions = {
     }
   }]
 }
+
 export default {
   name: 'm-item',
   props: {
@@ -143,19 +144,34 @@ export default {
     modelComputed: {
       get () {
         /* eslint-disable no-eval */
-        let val
-        try {
-          val = eval(`this.row.${this.column.prop}`)
-        } catch (error) {
-          throw new Error(`formData 没有${this.column.prop}属性`)
+        let val = null
+        if (this.column.prop && this.row) {
+          let arr = this.column.prop.split('.')
+          let lastIndex = arr.length - 1
+          val = arr.reduce((x, y) => {
+            if (arr.indexOf(y) === lastIndex) {
+              return x[y] || null
+            } else {
+              return x[y] || {}
+            }
+          }, this.row)
         }
         return val
       },
       set (value) {
-        try {
-          eval(`this.row.${this.column.prop} = value`)
-        } catch (error) {
-          throw new Error(`formData 没有${this.column.prop}属性`)
+        if (this.column.prop && this.row) {
+          let arr = this.column.prop.split('.')
+          let firstKey = arr.shift()
+          let lastIndex = arr.length - 1
+          let emptyObj = lastIndex < 0 ? value : {}
+          const val = arr.reduce((x, y) => {
+            if (arr.indexOf(y) === lastIndex) {
+              emptyObj[y] = value
+              return emptyObj
+            } else emptyObj[y] = {}
+            return emptyObj[y]
+          }, emptyObj)
+          this.$set(this.row, firstKey, val)
         }
       }
     }
@@ -178,6 +194,9 @@ export default {
     this.formatValue()
   },
   methods: {
+    setRow () {
+
+    },
     formatValue () {
       if (this.column && this.column.el === 'date-picker') {
         if (this.column.type === 'daterange' || this.column.type === 'datetimerange') {
@@ -216,8 +235,8 @@ export default {
     inputEnter (key) {
       if (this.column.listeners && this.column.listeners.inputEnter) return
       this.$emit('inputEnter', key)
-    },
-  
+    }
+
   }
 }
 </script>
