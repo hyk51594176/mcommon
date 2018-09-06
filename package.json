@@ -1,6 +1,6 @@
 {
   "name": "@weier/mcommon",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "mTable,mForm,mItem 基于element-ui 二次封装的table和form组件",
   "main": "dist/index.js",
   "scripts": {
