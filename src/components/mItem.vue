@@ -120,6 +120,7 @@ const pickerOptions = {
     }
   }]
 }
+
 /* eslint-disable no-eval */
 export default {
   name: 'm-item',
@@ -145,16 +146,15 @@ export default {
       get () {
         let val = null
         try {
-          val = eval(`this.row.${this.column.prop}`)
-        } catch (error) {
-        }
+          val = this.getStrFunction(`this.row.${this.column.prop}`)
+        } catch (error) { }
         return val
       },
       set (value) {
         try {
-          if (eval(`this.row.${this.column.prop}`) === undefined) {
+          if (this.getStrFunction(`this.row.${this.column.prop}`) === undefined) {
             this.setRowKey(value)
-          } else eval(`this.row.${this.column.prop} = value`)
+          } else this.getStrFunction(`this.row.${this.column.prop} = value`)
         } catch (error) {
           this.setRowKey(value)
         }
@@ -179,6 +179,10 @@ export default {
     this.formatValue()
   },
   methods: {
+    getStrFunction (str) {
+      const Fn = Function
+      return new Fn(`return ${str}`).call(this)
+    },
     setRowKey (value) {
       if (this.column.prop && this.row) {
         let arr = this.column.prop.split('.')
@@ -213,7 +217,7 @@ export default {
         for (let key in obj.params) {
           let value
           try {
-            value = eval(`this.row.${obj.params[key]}`)
+            value = this.getStrFunction(`this.row.${obj.params[key]}`)
           } catch (err) { }
           newObj[key] = value !== undefined ? value : obj.params[key]
         }

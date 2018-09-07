@@ -15,14 +15,14 @@ import {
   TableColumn,
   Tag,
   Col,
-  Cascader,
-} from 'element-ui';
-import mForm from './components/mForm.vue';
-import mItem from './components/mItem.vue';
-import mSelect from './components/mSelect.vue';
-import mTable from './components/mTable.vue';
- 
-const  components = [
+  Cascader
+} from 'element-ui'
+import mForm from './components/mForm.vue'
+import mItem from './components/mItem.vue'
+import mSelect from './components/mSelect.vue'
+import mTable from './components/mTable.vue'
+
+const components = [
   Input,
   InputNumber,
   Radio,
@@ -39,23 +39,23 @@ const  components = [
   TableColumn,
   Tag,
   Col,
-  Cascader,
+  Cascader
 ]
-const install = function (Vue,opts) {
+const install = function (Vue, opts) {
   if (install.installed) return
   Vue.prototype.$ELEMENT = {
     size: opts.size || '',
     zIndex: opts.zIndex || 2000
-  };
+  }
   components.map(component => {
-    Vue.component(component.name, component);
-  });
-  Vue.component(mForm.name,mForm)
-  Vue.component(mItem.name,mItem)
-  Vue.component(mSelect.name,mSelect)
-  Vue.component(mTable.name,mTable)
+    Vue.component(component.name, component)
+  })
+  Vue.component(mForm.name, mForm)
+  Vue.component(mItem.name, mItem)
+  Vue.component(mSelect.name, mSelect)
+  Vue.component(mTable.name, mTable)
 }
-if(window.Vue){
+if (window.Vue) {
   install(window.Vue)
 }
 export default {
@@ -63,5 +63,5 @@ export default {
   mForm,
   mItem,
   mSelect,
-  mTable,
+  mTable
 }

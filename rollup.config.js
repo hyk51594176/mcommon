@@ -17,7 +17,7 @@ export default {
   },
   cache: true,
   // external: [
-  //
+  //   'element-ui/lib/'
   // ],
   plugins: [
     VuePlugin(),
