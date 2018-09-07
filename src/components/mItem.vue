@@ -120,7 +120,7 @@ const pickerOptions = {
     }
   }]
 }
-
+/* eslint-disable no-eval */
 export default {
   name: 'm-item',
   props: {
@@ -144,33 +144,17 @@ export default {
     modelComputed: {
       get () {
         let val = null
-        if (this.column.prop && this.row) {
-          let arr = this.column.prop.split('.')
-          let lastIndex = arr.length - 1
-          val = arr.reduce((x, y) => {
-            if (arr.indexOf(y) === lastIndex) {
-              return x[y] || null
-            } else {
-              return x[y] || {}
-            }
-          }, this.row)
+        try {
+          val = eval(`this.row.${this.column.prop}`)
+        } catch (error) {
         }
         return val
       },
       set (value) {
-        if (this.column.prop && this.row) {
-          let arr = this.column.prop.split('.')
-          let firstKey = arr.shift()
-          let lastIndex = arr.length - 1
-          let emptyObj = lastIndex < 0 ? value : {}
-          const val = arr.reduce((x, y) => {
-            if (arr.indexOf(y) === lastIndex) {
-              emptyObj[y] = value
-              return emptyObj
-            } else emptyObj[y] = {}
-            return emptyObj[y]
-          }, emptyObj)
-          this.$set(this.row, firstKey, val)
+        try {
+          eval(`this.row.${this.column.prop} = value`)
+        } catch (error) {
+          this.setRowKey(value)
         }
       }
     }
@@ -193,8 +177,21 @@ export default {
     this.formatValue()
   },
   methods: {
-    setRow () {
-
+    setRowKey (value) {
+      if (this.column.prop && this.row) {
+        let arr = this.column.prop.split('.')
+        let firstKey = arr.shift()
+        let lastIndex = arr.length - 1
+        let emptyObj = lastIndex < 0 ? value : {}
+        const val = arr.reduce((x, y) => {
+          if (arr.indexOf(y) === lastIndex) {
+            emptyObj[y] = value
+            return emptyObj
+          } else emptyObj[y] = {}
+          return emptyObj[y]
+        }, emptyObj)
+        this.$set(this.row, firstKey, val)
+      }
     },
     formatValue () {
       if (this.column && this.column.el === 'date-picker') {
