@@ -152,7 +152,9 @@ export default {
       },
       set (value) {
         try {
-          eval(`this.row.${this.column.prop} = value`)
+          if (eval(`this.row.${this.column.prop}`) === undefined) {
+            this.setRowKey(value)
+          } else eval(`this.row.${this.column.prop} = value`)
         } catch (error) {
           this.setRowKey(value)
         }
