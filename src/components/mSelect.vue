@@ -84,17 +84,7 @@ export default {
       deep: true
     },
     value (v) {
-      if (this.multiple) {
-        if (!v) {
-          this.currentValue = []
-        } else if (Array.isArray(v)) {
-          this.currentValue = v
-        } else {
-          this.currentValue = v.split(',')
-        }
-      } else {
-        this.currentValue = v
-      }
+      this.setCurrentValue()
     },
     currentValue (v) {
       this.$emit('input', v)
@@ -120,12 +110,7 @@ export default {
     }
   },
   created () {
-    this.currentValue = this.value
-    if (this.multiple) {
-      if (typeof this.value === 'object' && !this.value.length) {
-        this.currentValue = []
-      }
-    }
+    this.setCurrentValue()
     if (this.dataList) {
       this.list = this.dataList || []
       return
@@ -136,6 +121,15 @@ export default {
     }
   },
   methods: {
+    setCurrentValue () {
+      if (this.multiple) {
+        if (Array.isArray(this.value)) {
+          this.currentValue = this.value
+        } else if (typeof this.value === 'string' && this.value) {
+          this.currentValue = this.value.split(',')
+        } else this.currentValue = []
+      } else this.currentValue = this.value
+    },
     pageInit () {
       const arr = Object.keys(this.params)
       if (arr.length) {
