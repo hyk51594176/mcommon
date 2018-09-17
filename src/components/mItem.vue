@@ -121,7 +121,6 @@ const pickerOptions = {
   }]
 }
 
-/* eslint-disable no-eval */
 export default {
   name: 'm-item',
   props: {
@@ -188,7 +187,7 @@ export default {
         let arr = this.column.prop.split('.')
         let firstKey = arr.shift()
         let lastIndex = arr.length - 1
-        let emptyObj = lastIndex < 0 ? value : {}
+        let emptyObj = lastIndex < 0 ? value : (this.row[firstKey] || {})
         const val = arr.reduce((x, y) => {
           if (arr.indexOf(y) === lastIndex) {
             emptyObj[y] = value

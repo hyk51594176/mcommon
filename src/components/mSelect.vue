@@ -59,6 +59,7 @@ export default {
     showMsg: Boolean,
     getList: Function
   },
+  inheritAttrs: false,
   data () {
     return {
       list: [],
@@ -90,16 +91,15 @@ export default {
       this.$emit('input', v)
       this.getCurrentObj()
     },
-    dataList (v) {
-      this.list = v
-      if (this.isDefault && v.length) {
-        if (!this.currentValue) {
-          this.currentValue = v[0][this.valueKey.value]
-        }
-      }
-      this.getCurrentObj()
+    dataList (val) {
+      this.list = val
     },
     list (val) {
+      if (this.isDefault && val.length) {
+        if (!this.currentValue) {
+          this.currentValue = val[0][this.valueKey.value]
+        }
+      }
       const checkedItem = val.filter((item) => item.checked)
       if (!checkedItem.length || this.currentValue || (Array.isArray(this.currentValue) && this.currentValue.length)) return
       if (this.multiple) {
@@ -107,6 +107,7 @@ export default {
       } else {
         this.currentValue = checkedItem[0][this.valueKey.value]
       }
+      this.getCurrentObj()
     }
   },
   created () {
