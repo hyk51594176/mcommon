@@ -1,0 +1,11 @@
+.m-form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap
+}
+.el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner {
+  width: 100%;
+}
+.m-select {
+  width: 100%;
+}

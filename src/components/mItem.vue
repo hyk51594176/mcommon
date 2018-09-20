@@ -2,7 +2,7 @@
   <el-input
     v-if="column.el==='input'"
     v-model="modelComputed"
-    v-bind="column" v-on="column.listeners"
+    v-bind="column" v-on="column.listeners" 
     @keyup.enter.native.stop='inputEnter(column.prop)'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
     <div v-if="column.append" slot="append" :class="column.appendClass">
@@ -241,8 +241,3 @@ export default {
   }
 }
 </script>
-<style>
-  .el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner {
-    width: 100%;
-}
-</style>

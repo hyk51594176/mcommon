@@ -3,13 +3,13 @@
 
 #### 用法
 
-npm install mcommon 
+>npm install @hanyk/mcommon 
 
 ```javascript
 
 import Vue from 'vue'
 
-import mcommon from 'mcommon'
+import mcommon from '@hanyk/mcommon'
 
 Vue.use(mcommon)
 ```
