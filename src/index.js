@@ -21,7 +21,7 @@ import mForm from './components/mForm.vue'
 import mItem from './components/mItem.vue'
 import mSelect from './components/mSelect.vue'
 import mTable from './components/mTable.vue'
-
+import './styles/index.css'
 const components = [
   Input,
   InputNumber,

@@ -1,5 +1,5 @@
 <template>
-  <el-select
+  <el-select class="m-select"
     v-model="currentValue"
     :loading='loading'
     loading-text="加载中"
@@ -194,8 +194,3 @@ export default {
   }
 }
 </script>
-<style lang='less'>
-.el-select {
-  width: 100%;
-}
-</style>

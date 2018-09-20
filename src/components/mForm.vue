@@ -1,5 +1,5 @@
 <template>
-  <el-form class="coustm" :model="formData" ref='ruleForm' :label-width="labelWidth" v-bind="$attrs">
+  <el-form class="m-form" :model="formData" ref='ruleForm' :label-width="labelWidth" v-bind="$attrs">
     <el-col :span="($store.getters.isMobile && !noWrap)? 22:(column.span||11)" v-for="column in columns" :key='column.prop'>
       <el-form-item v-bind="column" :label-width="!column.label?'10px':column.labelWidth||labelWidth">
         <slot :name='column.prop' :column='column'>
@@ -64,10 +64,3 @@ export default {
   }
 }
 </script>
-<style>
-.el-form {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap
-}
-</style>
