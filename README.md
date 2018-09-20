@@ -3,7 +3,7 @@
 
 #### 用法
 
-npm install @weier/mcommon 
+npm install mcommon 
 
 ```javascript
 

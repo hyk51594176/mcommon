@@ -1,6 +1,6 @@
 {
-  "name": "@weier/mcommon",
-  "version": "0.0.9",
+  "name": "mcommon",
+  "version": "0.0.1",
   "description": "mTable,mForm,mItem 基于element-ui 二次封装的table和form组件",
   "main": "dist/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   "dependencies": {
     "element-ui": "^2.4.4"
   },
-  "homepage": "http://gitlab.weierai.com/npmModular/mcommon",
+  "homepage": "https://github.com/hyk51594176/mComponent",
   "devDependencies": {
     "autoprefixer": "^9.0.1",
     "babel-core": "^6.26.3",
