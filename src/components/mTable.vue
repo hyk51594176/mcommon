@@ -22,8 +22,8 @@
       </el-table-column>
       <el-table-column :label="numTitle" align="center" width='60' v-if='showNum&&list.length' :fixed="numFiexd">
         <template slot-scope='scope'>
-          <slot name='mnum' :row='scope.row' :num="scope.$index+1+((page.pageIndex-1)*page.pageSize)" :$index='scope.$index'>
-            <span style="margin-left: 10px">{{ scope.$index+1+((page.pageIndex-1)*page.pageSize)}}</span>
+          <slot name='mnum' :row='scope.row' :num="scope.$index+1+((page.pageNum-1)*page.pageSize)" :$index='scope.$index'>
+            <span style="margin-left: 10px">{{ scope.$index+1+((page.pageNum-1)*page.pageSize)}}</span>
           </slot>
         </template>
       </el-table-column>
@@ -54,7 +54,7 @@
     <slot name='page'>
       <el-pagination
         style="text-align:right" v-if='showPage'
-        :current-page="page.pageIndex"
+        :current-page="page.pageNum"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :page-sizes="pageSizes"
@@ -124,7 +124,7 @@ export default {
       type: Object,
       default () {
         return {
-          pageIndex: 1,
+          pageNum: 1,
           pageSize: 15
         }
       }
@@ -144,8 +144,8 @@ export default {
       }
       return this.tableData.filter((obj, index) => {
         return (
-          index >= (this.page.pageIndex - 1) * this.page.pageSize &&
-          index < this.page.pageIndex * this.page.pageSize
+          index >= (this.page.pageNum - 1) * this.page.pageSize &&
+          index < this.page.pageNum * this.page.pageSize
         )
       })
     },
@@ -158,7 +158,7 @@ export default {
   },
   watch: {
     tableData () {
-      if (this.total === '' || this.total === null || isNaN(this.total)) this.page.pageIndex = 1
+      if (this.total === '' || this.total === null || isNaN(this.total)) this.page.pageNum = 1
     }
   },
   methods: {
@@ -222,7 +222,7 @@ export default {
       this.$emit('pageChange', this.page)
     },
     handleCurrentChange (val) {
-      this.page.pageIndex = val
+      this.page.pageNum = val
       this.$emit('pageChange', this.page)
     },
     toggleRowSelection (rows) {
