@@ -43,13 +43,15 @@ const components = [
 ]
 const install = function (Vue, opts) {
   if (install.installed) return
-  Vue.prototype.$ELEMENT = {
-    size: opts.size || '',
-    zIndex: opts.zIndex || 2000
+  if(!Vue.prototype.$ELEMENT){
+    Vue.prototype.$ELEMENT = {
+      size: opts.size || '',
+      zIndex: opts.zIndex || 2000
+    }
+    components.map(component => {
+      Vue.component(component.name, component)
+    })
   }
-  components.map(component => {
-    Vue.component(component.name, component)
-  })
   Vue.component(mForm.name, mForm)
   Vue.component(mItem.name, mItem)
   Vue.component(mSelect.name, mSelect)
