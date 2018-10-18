@@ -27,6 +27,7 @@
           </slot>
         </template>
       </el-table-column>
+      <slot></slot>
       <template v-for='obj in columns'>
         <el-table-column
           v-bind="obj"
