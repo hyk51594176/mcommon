@@ -38,7 +38,7 @@
           <template slot-scope='scope'>
             <slot :name='obj.prop' :row='scope.row' :$index='scope.$index' :column="obj">
                 <span v-if='!obj.el'>
-                  {{scope.row[obj.prop]}}
+                  {{obj.format?obj.format(scope.row):scope.row[obj.prop]}}
                 </span>
               <span v-else-if='obj.el==="boolean"'>
                 {{scope.row[obj.prop]===true?obj.trueLabel:obj.falseLabel}}
