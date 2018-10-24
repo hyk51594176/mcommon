@@ -40,9 +40,6 @@
                 <span v-if='!obj.el'>
                   {{obj.format?obj.format(scope.row):scope.row[obj.prop]}}
                 </span>
-              <span v-else-if='obj.el==="boolean"'>
-                {{scope.row[obj.prop]===true?obj.trueLabel:obj.falseLabel}}
-              </span>
               <m-item
                 :column='getColumns(obj,scope)'
                 @currentObj='(data,key)=>currentObj(scope,data,key)'
