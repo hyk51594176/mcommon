@@ -122,7 +122,7 @@ const pickerOptions = {
 }
 
 export default {
-  name: 'm-item',
+  name: 'MItem',
   props: {
     column: Object,
     row: Object
