@@ -62,7 +62,7 @@
 </template>
 <script>
 export default {
-  name: 'm-table',
+  name: 'MTable',
   props: {
     tableData: {
       type: Array,

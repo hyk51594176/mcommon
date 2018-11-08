@@ -15,7 +15,7 @@
 </template>
 <script>
 export default {
-  name: 'm-form',
+  name: 'MForm',
   props: {
     formData: {
       type: Object,

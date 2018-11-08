@@ -24,6 +24,7 @@ export default {
     name
   },
   cache: true,
+  external: id => id.indexOf('element-ui') > -1,
   plugins: [
     VuePlugin(),
     postcss({

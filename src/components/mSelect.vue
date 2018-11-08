@@ -23,7 +23,7 @@
 <script>
 
 export default {
-  name: 'm-select',
+  name: 'MSelect',
   props: {
     params: {
       type: Object,
