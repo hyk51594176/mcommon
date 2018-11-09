@@ -20,11 +20,11 @@ export default {
   output: {
     banner,
     file: 'dist/index.js',
-    format: 'cjs',
+    format: 'umd',
     name
   },
   cache: true,
-  external: id => id.indexOf('element-ui') > -1,
+  // external: id => id.indexOf('element-ui') > -1,
   plugins: [
     VuePlugin(),
     postcss({
