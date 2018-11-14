@@ -1,6 +1,6 @@
 {
   "name": "@hanyk/mcommon",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "description": "mTable,mForm,mItem 基于element-ui 二次封装的table和form组件",
   "main": "dist/index.js",
   "scripts": {
@@ -42,5 +42,8 @@
     "rollup-plugin-uglify": "^3.0.0",
     "rollup-plugin-vue": "^4.3.1",
     "vue-template-compiler": "^2.5.16"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
