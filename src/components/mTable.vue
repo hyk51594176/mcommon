@@ -13,16 +13,16 @@
       @current-change="currentChange"
       ref='commontable' v-bind="$attrs" v-on="$listeners">
       <el-table-column type="expand" v-if='expand'>
-        <template slot-scope='scope'>
-          <slot name='expand' :row='scope.row' :$index='scope.$index'>
-          </slot>
-        </template>
+        <slot name='expand' slot-scope='scope' :row='scope.row' :$index='scope.$index'/>
       </el-table-column>
-      <el-table-column type="selection" :selectable='selectable' align="center" v-if='selection&&list.length'>
+      <el-table-column type="selection" :selectable='selectable' align="center" v-if='(selection&&list.length)||$scopedSlots.checkbox'>
+        <template slot-scope="scope" v-if="$scopedSlots.checkbox">
+          <slot  name="checkbox"   :row='scope.row' :$index='scope.$index'/>
+        </template>
       </el-table-column>
       <el-table-column :label="numTitle" align="center" width='60' v-if='showNum&&list.length' :fixed="numFiexd">
         <template slot-scope='scope'>
-          <slot name='mnum' :row='scope.row' :num="scope.$index+1+((page.pageNum-1)*page.pageSize)" :$index='scope.$index'>
+          <slot name='mnum'  :row='scope.row' :num="scope.$index+1+((page.pageNum-1)*page.pageSize)" :$index='scope.$index'>
             <span style="margin-left: 10px">{{ scope.$index+1+((page.pageNum-1)*page.pageSize)}}</span>
           </slot>
         </template>
@@ -49,6 +49,11 @@
           </template>
         </el-table-column>
       </template>
+      <el-table-column header-align="center" fixed="right" :width="buttonWith" :label='buttonLabel' v-if="$scopedSlots.button">
+        <template slot-scope='{ row, $index }'>
+          <slot :row='row' :$index='$index' name="button" ></slot>
+        </template>
+      </el-table-column>
     </el-table>
     <slot name='page'>
       <el-pagination
@@ -70,6 +75,11 @@ export default {
       default () {
         return []
       }
+    },
+    buttonWith: [String,Number],
+    buttonLabel: {
+      type: String,
+      default: '操作'
     },
     layout: {
       type: String,
