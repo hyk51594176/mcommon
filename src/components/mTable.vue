@@ -31,7 +31,6 @@
       <template v-for='obj in columns'>
         <el-table-column
           v-bind="obj"
-          :header-align="obj.headerAlign||'center'"
           :class-name='obj.className||obj.el'
           :align='obj.align||"center"'
           :filter-method="obj.filters?filtetag.bind(null,obj):null"
