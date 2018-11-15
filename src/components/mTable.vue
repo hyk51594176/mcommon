@@ -39,9 +39,7 @@
           :key='getKey(obj.prop)'>
           <template slot-scope='scope'>
             <slot :name='obj.prop' :row='scope.row' :$index='scope.$index' :column="obj">
-                <span v-if='!obj.el'>
-                  {{obj.format?obj.format(scope.row):scope.row[obj.prop]}}
-                </span>
+              <m-table-item v-if='!obj.el' :row='scope.row' :column='obj' :index='scope.$index'/>
               <m-item
                 :column='getColumns(obj,scope)'
                 @currentObj='(data,key)=>currentObj(scope,data,key)'
@@ -68,7 +66,11 @@
   </div>
 </template>
 <script>
+import MTableItem from './MTableItem'
 export default {
+  components: {
+    MTableItem
+  },
   name: 'MTable',
   props: {
     tableData: {
@@ -77,7 +79,7 @@ export default {
         return []
       }
     },
-    buttonWith: [String,Number],
+    buttonWith: [String, Number],
     buttonLabel: {
       type: String,
       default: '操作'
