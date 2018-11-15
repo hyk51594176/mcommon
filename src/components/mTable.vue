@@ -13,7 +13,9 @@
       @current-change="currentChange"
       ref='commontable' v-bind="$attrs" v-on="$listeners">
       <el-table-column type="expand" v-if='expand'>
-        <slot name='expand' slot-scope='scope' :row='scope.row' :$index='scope.$index'/>
+        <template slot-scope="scope">
+          <slot name='expand' :row='scope.row' :$index='scope.$index'/>
+        </template>
       </el-table-column>
       <el-table-column type="selection" :selectable='selectable' align="center" v-if='(selection&&list.length)||$scopedSlots.checkbox'>
         <template slot-scope="scope" v-if="$scopedSlots.checkbox">
