@@ -30,14 +30,18 @@
         </template>
       </el-table-column>
       <slot></slot>
-      <template v-for='obj in columns'>
+      <template v-for='(obj,index) in columns'>
         <el-table-column
           v-bind="obj"
           :class-name='obj.className||obj.el'
           :align='obj.align||"center"'
           :filter-method="obj.filters?filtetag.bind(null,obj):null"
           :key='getKey(obj.prop)'>
-          <template slot-scope='scope'>
+          <div slot-scope='scope' :class="isTree?'first-columns':''">
+            <span v-if="scope.row.treeLevel && index === 0" :style="{width:`${scope.row.treeLevel*15}px`}"></span>
+            <span v-if="scope.row.expandAll!==undefined && index === 0" >
+              <i :class="scope.row.expandAll?'el-icon-minus':'el-icon-plus'" @click="expandClick(scope)"></i>&nbsp;
+            </span>
             <slot :name='obj.prop' :row='scope.row' :$index='scope.$index' :column="obj">
               <m-table-item v-if='!obj.el' :row='scope.row' :column='obj' :index='scope.$index'/>
               <m-item
@@ -45,7 +49,7 @@
                 @currentObj='(data,key)=>currentObj(scope,data,key)'
                 :row='scope.row' v-else />
             </slot>
-          </template>
+          </div>
         </el-table-column>
       </template>
       <el-table-column header-align="center" fixed="right" :width="buttonWith" :label='buttonLabel' v-if="$scopedSlots.button">
@@ -61,7 +65,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :page-sizes="pageSizes"
-        :page-size="page.pageSize" :layout="layout" :total="total||tableData.length" />
+        :page-size="page.pageSize" :layout="layout" :total="cTotal" />
     </slot>
   </div>
 </template>
@@ -79,6 +83,7 @@ export default {
         return []
       }
     },
+    isTree: Boolean,
     buttonWith: [String, Number],
     buttonLabel: {
       type: String,
@@ -149,12 +154,23 @@ export default {
     }
   },
   inheritAttrs: false,
+  data () {
+    return {
+      treeData: this.formatTreeData(this.tableData)
+    }
+  },
   computed: {
+    cTotal () {
+      const t = this.total || this.page.total
+      if (t) return t
+      return this.isTree ? this.treeData.length : this.tableData.length
+    },
     list () {
+      const arr = this.isTree ? this.treeData : this.tableData
       if (this.total || !this.showPage) {
-        return this.tableData
+        return arr
       }
-      return this.tableData.filter((obj, index) => {
+      return arr.filter((obj, index) => {
         return (
           index >= (this.page.pageNum - 1) * this.page.pageSize &&
           index < this.page.pageNum * this.page.pageSize
@@ -171,9 +187,28 @@ export default {
   watch: {
     tableData () {
       if (this.total === '' || this.total === null || isNaN(this.total)) this.page.pageNum = 1
+      if (this.isTree) this.treeData = this.formatTreeData(this.tableData)
     }
   },
   methods: {
+    formatTreeData (data, level = 0, parent = null, arr = []) {
+      data.forEach(obj => {
+        obj.treeLevel = level
+        obj.parent = parent
+        arr.push(obj)
+        if (obj.children && obj.children.length) {
+          if (obj.expandAll === undefined)obj.expandAll = false
+          if (obj.expandAll === true) this.formatTreeData(obj.children, level + 1, obj, arr)
+        }
+      })
+      return arr
+    },
+    expandClick (scope) {
+      scope.row.expandAll = !scope.row.expandAll
+      this.treeData = this.formatTreeData(this.tableData)
+
+      // this.treeData = []
+    },
     getKey (str) {
       if (this.forced) return (str || '') + (Math.random() * Date.now())
       return str
@@ -281,3 +316,8 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.first-columns{
+  display: flex;
+}
+</style>
