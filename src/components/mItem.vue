@@ -2,7 +2,7 @@
   <el-input
     v-if="column.el==='input'"
     v-model="modelComputed"
-    v-bind="column" v-on="column.listeners" 
+    v-bind="column" v-on="column.listeners"
     @keyup.enter.native.stop='inputEnter(column.prop)'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
     <div v-if="column.append" slot="append" :class="column.appendClass">
@@ -19,7 +19,7 @@
     filterable
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
     v-else-if="column.el==='select'">
-    <el-option v-for="item in column.list" v-if='item.Value' :key="column.props?item[column.props.value]:item.Value" :label="column.Text?item[column.Text]:item.Text" :value="column.bindObj?item:item.Value">
+    <el-option v-for="item in column.list"  :key="column.props?item[column.props.value]:item.Value" :label="column.Text?item[column.Text]:item.Text" :value="column.bindObj?item:item.Value">
     </el-option>
   </el-select>
   <el-date-picker
@@ -150,6 +150,15 @@ export default {
         return val
       },
       set (value) {
+        if (this.column.rules) {
+          let isNumber = false
+          if (Array.isArray(this.column.rules)) {
+            isNumber = this.column.rules.some(obj => obj.type === 'number')
+          } else {
+            isNumber = this.column.rules.type === 'number'
+          }
+          if (isNumber && !isNaN(value)) value = Number(value)
+        }
         try {
           if (this.getStrFunction(`this.row.${this.column.prop}`) === undefined) {
             this.setRowKey(value)
