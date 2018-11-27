@@ -5,7 +5,7 @@ import MTable from './components/MTable.vue'
 import './styles/index.css'
 const install = function (Vue, opts) {
   if (install.installed) return
-  if(!Vue.prototype.$ELEMENT){
+  if (!Vue.prototype.$ELEMENT) {
     throw new Error('请先安装element-ui')
   }
   Vue.component(MForm.name, MForm)
