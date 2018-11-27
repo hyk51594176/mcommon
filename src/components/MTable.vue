@@ -67,6 +67,7 @@
 </template>
 <script>
 import MTableItem from './MTableItem'
+import ExportCsv from "../utils/export-csv";
 export default {
   components: {
     MTableItem
@@ -174,6 +175,28 @@ export default {
     }
   },
   methods: {
+     exportCsv (params = {}) {
+      if (params.filename) {
+        if (params.filename.indexOf('.csv') === -1) {
+          params.filename += '.csv'
+        }
+      } else {
+        params.filename = 'table.csv'
+      }
+      let columns = []
+      let datas = []
+      if (params.columns && params.data) {
+        columns = params.columns
+        datas = params.data
+      } else {
+        columns = this.columns
+        if (!('original' in params)) params.original = true
+        datas = params.original ? this.tableData : this.list
+      }
+      const data = ExportCsv.format(columns, datas, params)
+      if (params.callback) params.callback(data)
+      else ExportCsv.download(params.filename, data)
+    },
     getKey (str) {
       if (this.forced) return (str || '') + (Math.random() * Date.now())
       return str
