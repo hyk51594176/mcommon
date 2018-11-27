@@ -3,7 +3,7 @@
     v-if="column.el==='input'"
     v-model="modelComputed"
     v-bind="column" v-on="column.listeners"
-    @keyup.enter.native.stop='inputEnter(column.prop)'
+     @blur="isForce=false" @focus='isForce=true'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
     <div v-if="column.append" slot="append" :class="column.appendClass">
       <slot :name="column.prop+'_append'">
@@ -60,7 +60,7 @@
   <m-select
     v-else-if="column.el==='mSelect'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
   <el-tag :type="column.type" v-else-if="column.el==='tag'">{{modelComputed}}</el-tag>
-  <span v-else >{{modelComputed}}</span>
+  <span v-else-if="column.el==='span'||!column.el" >{{modelComputed}}</span>
 </template>
 <script>
 const pickerOptions = {
@@ -136,7 +136,8 @@ export default {
   inheritAttrs: false,
   data () {
     return {
-      defaultTime: ['00:00:00', '23:59:59']
+      defaultTime: ['00:00:00', '23:59:59'],
+      isForce: false
     }
   },
   computed: {
@@ -152,7 +153,12 @@ export default {
         let val = null
         try {
           val = this.getStrFunction(`this.row.${this.column.prop}`)
-        } catch (error) { }
+        } catch (error) {
+          console.error(error)
+        }
+        if (this.column.type === 'currency') {
+          return this.isForce ? val : this.currency(val, this.column.currency, this.column.decimals)
+        }
         return val
       },
       set (value) {
@@ -164,6 +170,9 @@ export default {
             isNumber = this.column.rules.type === 'number'
           }
           if (isNumber && !isNaN(value)) value = Number(value)
+        }
+        if (this.column.type === 'currency') {
+          isNaN(value) ? (value = 0) : (value = Number(value))
         }
         try {
           if (this.getStrFunction(`this.row.${this.column.prop}`) === undefined) {
@@ -244,12 +253,28 @@ export default {
       if (this.column.listeners && this.column.listeners.currentObj) return
       this.$emit('currentObj', data, key)
     },
-
-    inputEnter (key) {
-      if (this.column.listeners && this.column.listeners.inputEnter) return
-      this.$emit('inputEnter', key)
+    currency (value, currency = '¥', decimals = 2) {
+      const digitsRE = /(\d{3})(?=\d)/g
+      value = parseFloat(value)
+      if (!isFinite(value) || (!value && value !== 0)) return ''
+      currency = currency != null ? currency : ''
+      decimals = decimals != null ? decimals : 2
+      const stringified = Math.abs(value).toFixed(decimals)
+      const _int = decimals
+        ? stringified.slice(0, -1 - decimals)
+        : stringified
+      const i = _int.length % 3
+      const head = i > 0
+        ? (_int.slice(0, i) + (_int.length > 3 ? ',' : ''))
+        : ''
+      const _float = decimals
+        ? stringified.slice(-1 - decimals)
+        : ''
+      const sign = value < 0 ? '-' : ''
+      return sign + currency + head +
+      _int.slice(i).replace(digitsRE, '$1,') +
+      _float
     }
-
   }
 }
 </script>
