@@ -124,8 +124,14 @@ const pickerOptions = {
 export default {
   name: 'MItem',
   props: {
-    column: Object,
-    row: Object
+    column: {
+      type: Object,
+      required: true
+    },
+    row: {
+      type: Object,
+      required: true
+    }
   },
   inheritAttrs: false,
   data () {
@@ -170,21 +176,16 @@ export default {
     }
   },
   watch: {
-    column: {
-      handler (val) {
-        this.formatValue()
-      },
-      deep: true
-    },
-    row: {
-      handler (val) {
-        this.formatValue()
-      },
-      deep: true
-    }
+    'column.type': 'formatValue'
   },
   created () {
     this.formatValue()
+    const unWatch1 = this.$watch('column.type', this.formatValue)
+    const unWatch2 = this.$watch('column.multiple', this.formatValue)
+    this.$once('hook:beforeDestroy', () => {
+      unWatch1()
+      unWatch2()
+    })
   },
   methods: {
     getStrFunction (str) {
@@ -208,14 +209,16 @@ export default {
       }
     },
     formatValue () {
-      if (this.column && this.column.el === 'date-picker') {
-        if (this.column.type === 'daterange' || this.column.type === 'datetimerange') {
-          let arr = this.row[this.column.prop]
-          if (!arr) {
+      if (this.column.el === 'date-picker' || this.column.el === 'mSelect') {
+        let obj = this.row[this.column.prop]
+        if (this.column.type === 'daterange' || this.column.type === 'datetimerange' || this.column.multiple) {
+          if (!obj) {
             this.row[this.column.prop] = []
-          } else if (!Array.isArray(arr)) {
-            this.row[this.column.prop] = arr.split(',')
+          } else if (!Array.isArray(obj)) {
+            this.row[this.column.prop] = obj.split(',')
           }
+        } else {
+          if (Array.isArray(obj)) this.row[this.column.prop] = obj[0] ? obj[0] : null
         }
       }
     },
