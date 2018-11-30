@@ -2,8 +2,8 @@
   <el-input
     v-if="column.el==='input'"
     v-model="modelComputed"
-    v-bind="column" v-on="column.listeners" 
-    @keyup.enter.native.stop='inputEnter(column.prop)'
+    v-bind="column" v-on="column.listeners"
+     @blur="isForce=false" @focus='isForce=true'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
     <div v-if="column.append" slot="append" :class="column.appendClass">
       <slot :name="column.prop+'_append'">
@@ -19,7 +19,7 @@
     filterable
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
     v-else-if="column.el==='select'">
-    <el-option v-for="item in column.list" v-if='item.Value' :key="column.props?item[column.props.value]:item.Value" :label="column.Text?item[column.Text]:item.Text" :value="column.bindObj?item:item.Value">
+    <el-option v-for="item in column.list"  :key="column.props?item[column.props.value]:item.Value" :label="column.Text?item[column.Text]:item.Text" :value="column.bindObj?item:item.Value">
     </el-option>
   </el-select>
   <el-date-picker
@@ -60,7 +60,7 @@
   <m-select
     v-else-if="column.el==='mSelect'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
   <el-tag :type="column.type" v-else-if="column.el==='tag'">{{modelComputed}}</el-tag>
-  <span v-else >{{modelComputed}}</span>
+  <span v-else-if="column.el==='span'||!column.el" >{{modelComputed}}</span>
 </template>
 <script>
 const pickerOptions = {
@@ -124,13 +124,20 @@ const pickerOptions = {
 export default {
   name: 'MItem',
   props: {
-    column: Object,
-    row: Object
+    column: {
+      type: Object,
+      required: true
+    },
+    row: {
+      type: Object,
+      required: true
+    }
   },
   inheritAttrs: false,
   data () {
     return {
-      defaultTime: ['00:00:00', '23:59:59']
+      defaultTime: ['00:00:00', '23:59:59'],
+      isForce: false
     }
   },
   computed: {
@@ -146,10 +153,27 @@ export default {
         let val = null
         try {
           val = this.getStrFunction(`this.row.${this.column.prop}`)
-        } catch (error) { }
+        } catch (error) {
+          console.error(error)
+        }
+        if (this.column.type === 'currency') {
+          return this.isForce ? val : this.currency(val, this.column.currency, this.column.decimals)
+        }
         return val
       },
       set (value) {
+        if (this.column.rules) {
+          let isNumber = false
+          if (Array.isArray(this.column.rules)) {
+            isNumber = this.column.rules.some(obj => obj.type === 'number')
+          } else {
+            isNumber = this.column.rules.type === 'number'
+          }
+          if (isNumber && !isNaN(value)) value = Number(value)
+        }
+        if (this.column.type === 'currency') {
+          isNaN(value) ? (value = 0) : (value = Number(value))
+        }
         try {
           if (this.getStrFunction(`this.row.${this.column.prop}`) === undefined) {
             this.setRowKey(value)
@@ -161,21 +185,16 @@ export default {
     }
   },
   watch: {
-    column: {
-      handler (val) {
-        this.formatValue()
-      },
-      deep: true
-    },
-    row: {
-      handler (val) {
-        this.formatValue()
-      },
-      deep: true
-    }
+    'column.type': 'formatValue'
   },
   created () {
     this.formatValue()
+    const unWatch1 = this.$watch('column.type', this.formatValue)
+    const unWatch2 = this.$watch('column.multiple', this.formatValue)
+    this.$once('hook:beforeDestroy', () => {
+      unWatch1()
+      unWatch2()
+    })
   },
   methods: {
     getStrFunction (str) {
@@ -199,14 +218,16 @@ export default {
       }
     },
     formatValue () {
-      if (this.column && this.column.el === 'date-picker') {
-        if (this.column.type === 'daterange' || this.column.type === 'datetimerange') {
-          let arr = this.row[this.column.prop]
-          if (!arr) {
+      if (this.column.el === 'date-picker' || this.column.el === 'mSelect') {
+        let obj = this.row[this.column.prop]
+        if (this.column.type === 'daterange' || this.column.type === 'datetimerange' || this.column.multiple) {
+          if (!obj) {
             this.row[this.column.prop] = []
-          } else if (!Array.isArray(arr)) {
-            this.row[this.column.prop] = arr.split(',')
+          } else if (!Array.isArray(obj)) {
+            this.row[this.column.prop] = obj.split(',')
           }
+        } else {
+          if (Array.isArray(obj)) this.row[this.column.prop] = obj[0] ? obj[0] : null
         }
       }
     },
@@ -232,12 +253,28 @@ export default {
       if (this.column.listeners && this.column.listeners.currentObj) return
       this.$emit('currentObj', data, key)
     },
-
-    inputEnter (key) {
-      if (this.column.listeners && this.column.listeners.inputEnter) return
-      this.$emit('inputEnter', key)
+    currency (value, currency = '¥', decimals = 2) {
+      const digitsRE = /(\d{3})(?=\d)/g
+      value = parseFloat(value)
+      if (!isFinite(value) || (!value && value !== 0)) return ''
+      currency = currency != null ? currency : ''
+      decimals = decimals != null ? decimals : 2
+      const stringified = Math.abs(value).toFixed(decimals)
+      const _int = decimals
+        ? stringified.slice(0, -1 - decimals)
+        : stringified
+      const i = _int.length % 3
+      const head = i > 0
+        ? (_int.slice(0, i) + (_int.length > 3 ? ',' : ''))
+        : ''
+      const _float = decimals
+        ? stringified.slice(-1 - decimals)
+        : ''
+      const sign = value < 0 ? '-' : ''
+      return sign + currency + head +
+      _int.slice(i).replace(digitsRE, '$1,') +
+      _float
     }
-
   }
 }
 </script>
