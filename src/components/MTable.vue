@@ -12,7 +12,7 @@
       @sort-change='sortChange'
       @current-change="currentChange"
       ref='commontable' v-bind="$attrs" v-on="$listeners">
-      <el-table-column type="expand" v-if='expand'>
+      <el-table-column type="expand" v-if='expand && !isTree'>
         <template slot-scope="scope">
           <slot name='expand' :row='scope.row' :$index='scope.$index'/>
         </template>
@@ -22,7 +22,7 @@
           <slot  name="checkbox"   :row='scope.row' :$index='scope.$index'/>
         </template>
       </el-table-column>
-      <el-table-column :label="numTitle" align="center" width='60' v-if='showNum&&list.length' :fixed="numFiexd">
+      <el-table-column :label="numTitle" align="center" width='60' v-if='showNum && list.length && !isTree' :fixed="numFiexd||columns[0].fixed">
         <template slot-scope='scope'>
           <slot name='mnum'  :row='scope.row' :num="scope.$index+1+((page.pageNum-1)*page.pageSize)" :$index='scope.$index'>
             <span style="margin-left: 10px">{{ scope.$index+1+((page.pageNum-1)*page.pageSize)}}</span>
@@ -37,10 +37,10 @@
           :align='obj.align||"center"'
           :filter-method="obj.filters?filtetag.bind(null,obj):null"
           :key='getKey(obj.prop)'>
-          <div slot-scope='scope' :class="isTree?'first-columns':''">
-            <span v-if="scope.row.treeLevel && index === 0" :style="{width:`${scope.row.treeLevel*15}px`}"></span>
-            <span v-if="scope.row.expandAll!==undefined && index === 0" >
-              <i :class="scope.row.expandAll?'el-icon-minus':'el-icon-plus'" @click="expandClick(scope)"></i>&nbsp;
+          <div slot-scope='scope' :class="isTree && index === 0?'first-columns':''" >
+            <span v-if="scope.row.treeLevel && index === 0" :style="{minWidth:`${scope.row.treeLevel*15}px`}"></span>
+            <span v-if="scope.row.expandAll!==undefined && index === 0"  class="expan-icon" @click="expandClick(scope)">
+              <i :class="scope.row.expandAll?'el-icon-minus':'el-icon-plus'" ></i>&nbsp;
             </span>
             <slot :name='obj.prop' :row='scope.row' :$index='scope.$index' :column="obj">
               <m-table-item v-if='!obj.el' :row='scope.row' :column='obj' :index='scope.$index'/>
@@ -60,7 +60,7 @@
     </el-table>
     <slot name='page'>
       <el-pagination
-        style="text-align:right" v-if='showPage'
+        style="text-align:right" v-if='showPage && !isTree'
         :current-page="page.pageNum"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -167,11 +167,11 @@ export default {
       return this.isTree ? this.treeData.length : this.tableData.length
     },
     list () {
-      const arr = this.isTree ? this.treeData : this.tableData
+      if (this.isTree) return this.treeData
       if (this.total || !this.showPage) {
-        return arr
+        return this.tableData
       }
-      return arr.filter((obj, index) => {
+      return this.tableData.filter((obj, index) => {
         return (
           index >= (this.page.pageNum - 1) * this.page.pageSize &&
           index < this.page.pageNum * this.page.pageSize
@@ -187,19 +187,19 @@ export default {
   },
   watch: {
     tableData () {
-      if (this.total === '' || this.total === null || isNaN(this.total)) this.page.pageNum = 1
+      const count = this.total || this.page.total
+      if (!count && isNaN(count)) this.page.pageNum = 1
       if (this.isTree) this.treeData = this.formatTreeData(this.tableData)
     }
   },
   methods: {
-    formatTreeData (data, level = 0, parent = null, arr = []) {
+    formatTreeData (data, level = 0, arr = []) {
       data.forEach(obj => {
         obj.treeLevel = level
-        obj.parent = parent
         arr.push(obj)
         if (obj.children && obj.children.length) {
           if (obj.expandAll === undefined)obj.expandAll = false
-          if (obj.expandAll === true) this.formatTreeData(obj.children, level + 1, obj, arr)
+          if (obj.expandAll === true) this.formatTreeData(obj.children, level + 1, arr)
         }
       })
       return arr
@@ -340,5 +340,11 @@ export default {
 <style lang="less">
 .first-columns{
   display: flex;
+  .expan-icon i{
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 13px;
+    // font-size: 16px
+  }
 }
 </style>
