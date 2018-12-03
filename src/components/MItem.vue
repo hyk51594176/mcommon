@@ -24,7 +24,7 @@
   </el-select>
   <el-date-picker
     v-model="modelComputed" v-bind="column" v-on="column.listeners"
-    :default-time='column.defaultTime||defaultTime'
+    :default-time='defaultTime'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
     :picker-options="column.pickerOptions||getpickerOptions(column.type,column.isNeedFast)"
     v-else-if="column.el==='date-picker'">
@@ -136,11 +136,15 @@ export default {
   inheritAttrs: false,
   data () {
     return {
-      defaultTime: ['00:00:00', '23:59:59'],
       isForce: false
     }
   },
   computed: {
+    defaultTime () {
+      if (this.column.defaultTime) return this.column.defaultTime
+      if (this.column.type === 'daterange' || this.column.type === 'datetimerange') return ['00:00:00', '23:59:59']
+      return '00:00:00'
+    },
     valueKey () {
       if (this.column.valueKey) return this.column.valueKey
       return {
