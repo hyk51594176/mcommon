@@ -1,4 +1,4 @@
-import MForm from './components/MForm.vue'
+import MForm from './components/MForm'
 import MItem from './components/MItem.vue'
 import MSelect from './components/MSelect.vue'
 import MTable from './components/MTable.vue'
