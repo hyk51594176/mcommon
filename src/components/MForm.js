@@ -3,7 +3,8 @@ const renderItem = (h, context) => {
   const { model } = context.data.attrs
   if (!isMobile && context.parent.$store) isMobile = context.parent.$store.getters.isMobile
   return columns.map((column, index) => {
-    const children = (context.children || []).find(obj => obj.data.slot === column.prop)
+    const children = context.slots()[column.prop]
+    // (context.children || []).find(obj => obj.data.slot === column.prop)
     return h('el-col', {
       props: {
         span: (isMobile && !noWrap) ? 22 : (column.span || 11)
