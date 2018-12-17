@@ -2,7 +2,7 @@ import MForm from './components/MForm.vue'
 import MItem from './components/MItem.vue'
 import MSelect from './components/MSelect.vue'
 import MTable from './components/MTable.vue'
-import RenderItem from './components/RenderItem';
+import RenderItem from './components/RenderItem'
 import './styles/index.css'
 const install = function (Vue, opts) {
   if (install.installed) return
