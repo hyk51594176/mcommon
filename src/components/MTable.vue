@@ -356,23 +356,4 @@ export default {
   }
 }
 </script>
-<style lang="less">
-.first-columns{
-  display: flex;
-  .expan-icon i{
-    cursor: pointer;
-    font-weight: 900;
-    font-size: 13px;
-    // font-size: 16px
-  }
-}
-.el-table .cell.el-tooltip{
-  .m-item{
-    word-break: break-all;
-    line-height: 23px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-</style>
+

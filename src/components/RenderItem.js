@@ -10,10 +10,6 @@ export default {
     const { row, column, index } = context.props
     const node = column.render ? column.render(h, { row, column, $index: index })
       : (column.format ? column.format(row) : row[column.prop])
-    return h('span', {
-      'class': {
-        'word-b': true
-      }
-    }, [node])
+    return h('span', {}, [node])
   }
 }
