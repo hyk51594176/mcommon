@@ -59,7 +59,7 @@
   </el-switch>
   <m-select
     v-else-if="componentType==='m-select'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
-    <render-item v-else :row="row" :column='column' :index="index"/>
+    <render-item v-else :row="row" :value='modelComputed' :column='column' :index="index"/>
 </template>
 <script>
 const pickerOptions = {
@@ -169,9 +169,9 @@ export default {
         try {
           val = this.getStrFunction(`this.row.${this.column.prop}`)
         } catch (error) {
-          console.error(error)
+          this.setRowKey(null)
         }
-        if (this.column.type === 'currency') {
+        if (this.column.type === 'currency' && val) {
           return this.isForce ? val : this.currency(val, this.column.currency, this.column.decimals)
         }
         return val
@@ -205,21 +205,24 @@ export default {
   },
   methods: {
     getStrFunction (str) {
+      str = str.replace(/(\.\d)/g, '[$1]').replace(/\.\[/g, '[')
       const Fn = Function
       return new Fn(`return ${str}`).call(this)
     },
     setRowKey (value) {
       if (this.column.prop && this.row) {
-        let arr = this.column.prop.split('.')
+        let path = this.column.prop.replace(/\[(\w+)\]/g, '.$1').replace(/^\./, '')
+        let arr = path.split('.')
         let firstKey = arr.shift()
         let lastIndex = arr.length - 1
         let emptyObj = lastIndex < 0 ? value : (this.row[firstKey] || {})
-        const val = arr.reduce((x, y) => {
-          if (arr.indexOf(y) === lastIndex) {
-            emptyObj[y] = value
+        const val = arr.reduce((x, y, index) => {
+          if (index === lastIndex) {
+            x[y] = value
             return emptyObj
-          } else emptyObj[y] = {}
-          return emptyObj[y]
+          }
+          if (!emptyObj[y])x[y] = {}
+          return x[y]
         }, emptyObj)
         this.$set(this.row, firstKey, val)
       }
