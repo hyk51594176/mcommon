@@ -167,7 +167,8 @@ export default {
     getData (otherData = {}) {
       if (!this.getList) return
       this.loading = true
-      this.getList({ ...this.params, ...otherData }, this.showMsg).then(({ data = [] }) => {
+      this.getList({ ...this.params, ...otherData }, this.showMsg).then((res) => {
+        let data = Array.isArray(res) ? res : (res.data || [])
         if (data.length) {
           if (!this.multiple) {
             if (this.currentValue) {

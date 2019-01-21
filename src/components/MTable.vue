@@ -46,21 +46,9 @@
                   :row='scope.row' :index='scope.$index' class="m-item"/>
               </slot>
           </span>
-          <!-- <div slot-scope='scope' :class="isTree && index === 0?'first-columns':null" >
-            <span v-if="scope.row.treeLevel && index === 0" :style="{minWidth:`${scope.row.treeLevel*15}px`}"></span>
-            <span v-if="scope.row.expandAll!==undefined && index === 0"  class="expan-icon" @click="expandClick(scope)">
-              <i :class="scope.row.expandAll?'el-icon-minus':'el-icon-plus'" ></i>&nbsp;
-            </span>
-            <slot :name='obj.prop' :row='scope.row' :$index='scope.$index' :column="obj">
-              <m-item
-                :column='getColumns(obj,scope)'
-                @currentObj='(data,key)=>currentObj(scope,data,key)'
-                :row='scope.row' :index='scope.$index'/>
-            </slot>
-          </span> -->
         </el-table-column>
       </template>
-      <el-table-column :align="buttonAlign||'center'" :fixed="buttonFixed" :width="buttonWith" :label='buttonLabel' v-if="$scopedSlots.button">
+      <el-table-column :align="buttonAlign||'center'" :fixed="buttonFixed" :width="buttonWidth" :label='buttonLabel' v-if="$scopedSlots.button">
         <template slot-scope='{ row, $index }'>
           <slot :row='row' :$index='$index' name="button" ></slot>
         </template>
@@ -89,7 +77,7 @@ export default {
       }
     },
     isTree: Boolean,
-    buttonWith: [String, Number],
+    buttonWidth: [String, Number],
     buttonAlign: {
       type: String,
       default: 'center'
@@ -156,8 +144,7 @@ export default {
       default () {
         return {
           pageNum: 1,
-          pageSize: 15,
-          total: 0
+          pageSize: 15
         }
       }
     },
@@ -182,8 +169,8 @@ export default {
     },
     list () {
       if (this.isTree) return this.treeData
-      const t = this.total || this.page.total
-      if (t || !this.showPage) {
+      const t = this.total || (this.page && this.page.total)
+      if (this.showPage || !t) {
         return this.tableData
       }
       return this.tableData.filter((obj, index) => {
@@ -312,9 +299,11 @@ export default {
       this.page.pageNum = val
       this.$emit('pageChange', this.page)
     },
-    toggleRowSelection (rows) {
-      rows.forEach(row => {
-        this.$refs.commontable.toggleRowSelection(row)
+    toggleRowSelection (rows, type) {
+      this.$nextTick(() => {
+        rows.forEach(row => {
+          this.$refs.commontable.toggleRowSelection(row, type)
+        })
       })
     },
     clearSelection () {
@@ -356,4 +345,3 @@ export default {
   }
 }
 </script>
-

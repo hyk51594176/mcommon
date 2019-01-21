@@ -1,7 +1,7 @@
 <template>
   <el-input
     v-if="componentType==='el-input'"
-    v-model="modelComputed"
+    v-model.trim="modelComputed"
     v-bind="column" v-on="column.listeners"
      @blur="isForce=false" @focus='isForce=true'
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
@@ -215,16 +215,20 @@ export default {
         let arr = path.split('.')
         let firstKey = arr.shift()
         let lastIndex = arr.length - 1
-        let emptyObj = lastIndex < 0 ? value : (this.row[firstKey] || {})
-        const val = arr.reduce((x, y, index) => {
-          if (index === lastIndex) {
-            x[y] = value
-            return emptyObj
-          }
-          if (!emptyObj[y])x[y] = {}
-          return x[y]
-        }, emptyObj)
-        this.$set(this.row, firstKey, val)
+        if (lastIndex > -1) {
+          let emptyObj = this.row[firstKey] || {}
+          const val = arr.reduce((x, y, index) => {
+            if (index === lastIndex) {
+              x[y] = value
+              return emptyObj
+            }
+            if (!x[y])x[y] = {}
+            return x[y]
+          }, emptyObj)
+          this.$set(this.row, firstKey, JSON.parse(JSON.stringify(val)))
+        } else {
+          this.$set(this.row, firstKey, value)
+        }
       }
     },
     formatValue () {
