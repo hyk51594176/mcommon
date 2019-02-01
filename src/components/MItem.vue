@@ -215,7 +215,7 @@ export default {
         let arr = path.split('.')
         let firstKey = arr.shift()
         let lastIndex = arr.length - 1
-        if (lastIndex > -1) {
+        if (lastIndex >= 0) {
           let emptyObj = this.row[firstKey] || {}
           const val = arr.reduce((x, y, index) => {
             if (index === lastIndex) {
