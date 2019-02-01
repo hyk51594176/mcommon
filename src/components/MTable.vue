@@ -170,6 +170,10 @@ export default {
     list () {
       if (this.isTree) return this.treeData
       const t = this.total || (this.page && this.page.total)
+      // if (this.showPage) return this.tableData
+      // if (!this.showPage && !t) {
+      //   return this.tableData
+      // }
       if (this.showPage || !t) {
         return this.tableData
       }
@@ -201,6 +205,11 @@ export default {
         obj.treeLevel = level
         arr.push(obj)
         if (obj.children && obj.children.length) {
+          const key = this.$attrs.rowKey
+          if (this.treeData && this.treeData.length && key) {
+            const o = this.treeData.find(item => item[key] === obj[key]) || { expandAll: false }
+            obj.expandAll = o.expandAll
+          }
           if (obj.expandAll === undefined)obj.expandAll = false
           if (obj.expandAll === true) this.formatTreeData(obj.children, level + 1, arr)
         }
@@ -345,3 +354,4 @@ export default {
   }
 }
 </script>
+
