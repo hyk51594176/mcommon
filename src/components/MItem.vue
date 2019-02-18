@@ -7,7 +7,7 @@
     :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
     <div v-if="column.append" slot="append" :class="column.appendClass">
       <slot :name="column.prop+'_append'">
-        <div @click='btnClick({data:row,column,$event})'>
+        <div @click='column.listeners.btnClick'>
           <i :class="column.appendIcon"></i> {{column.appendText}}
         </div>
       </slot>
@@ -52,14 +52,17 @@
   </el-radio-group>
   <el-cascader
     v-model="modelComputed" v-bind="column" v-on="column.listeners" filterable
-    :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
-    @active-item-change='btnClick({data:row,column,$event})' v-else-if="componentType==='el-cascader'">
+    :placeholder='column.placeholder!=undefined?column.placeholder:column.label' v-else-if="componentType==='el-cascader'">
   </el-cascader>
   <el-switch v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="componentType==='el-switch'">
   </el-switch>
   <m-select
     v-else-if="componentType==='m-select'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
-    <render-item v-else :row="row" :value='modelComputed' :column='column' :index="index"/>
+    <render-item v-else :row="row"
+    :value='modelComputed' :column='column'
+    :renderItem='column.render'
+    :format='column.format'
+    :index="index"/>
 </template>
 <script>
 const pickerOptions = {
