@@ -25,3 +25,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.mform-item{
+  white-space: nowrap;
+}
