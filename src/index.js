@@ -13,7 +13,7 @@ const install = function (Vue, opts) {
   Vue.component(MItem.name, MItem)
   Vue.component(MSelect.name, MSelect)
   Vue.component(MTable.name, MTable)
-  Vue.component(RenderItem, RenderItem)
+  Vue.component(RenderItem.name, RenderItem)
 }
 if (window.Vue) {
   install(window.Vue)
