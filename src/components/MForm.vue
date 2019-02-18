@@ -95,8 +95,3 @@ export default {
   }
 }
 </script>
-<style lang="less">
-.mform-item{
-  white-space: nowrap;
-}
-</style>
