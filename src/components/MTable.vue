@@ -205,7 +205,7 @@ export default {
         obj.treeLevel = level
         arr.push(obj)
         if (obj.children && obj.children.length) {
-          const key = this.$attrs.rowKey
+          const key = this.$attrs.rowKey || this.$attrs['row-key']
           if (this.treeData && this.treeData.length && key) {
             const o = this.treeData.find(item => item[key] === obj[key]) || { expandAll: false }
             obj.expandAll = o.expandAll
@@ -354,4 +354,3 @@ export default {
   }
 }
 </script>
-

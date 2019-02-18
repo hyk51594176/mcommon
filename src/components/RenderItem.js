@@ -4,13 +4,16 @@ export default {
     row: Object,
     column: Object,
     index: Number,
-    value: [String, Number]
+    renderItem: [Function, Object],
+    format: Function,
+    value: [String, Number, Array, Object, Boolean]
   },
   name: 'RenderItem',
   render (h, context) {
-    const { row, column, index, value } = context.props
-    const node = column.render ? column.render(h, { row, column, $index: index })
-      : (column.format ? column.format(row) : value)
-    return h('span', {}, [node])
+    const { row, renderItem, index, value, format, column } = context.props
+    const node = typeof renderItem === 'function' ? renderItem(h, { row, column, $index: index }) : renderItem
+    const text = (format ? format(row) : value)
+    if (node) return node
+    return h('span', {}, text)
   }
 }
