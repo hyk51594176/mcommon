@@ -23,7 +23,7 @@
 <script>
 import {
   isDiff
-} from '../utils/index'
+} from '../utils/index.js'
 export default {
   name: 'MSelect',
   props: {
@@ -56,7 +56,6 @@ export default {
       default: ''
     },
     dataList: Array,
-    isDefault: Boolean,
     multiple: Boolean,
     showMsg: Boolean,
     getList: Function
@@ -72,18 +71,13 @@ export default {
   },
   watch: {
     params (nv, ov) {
-      let flag = isDiff(nv, ov)
-      if (flag) {
-        this.multiple ? this.currentValue = [] : this.currentValue = null
-        this.pageInit()
-      }
+      isDiff(nv, ov) && this.pageInit()
       // if (!nv) return
       // if (!ov) {
       //   this.pageInit()
       // } else {
       //   let flag = Object.keys(nv).some(key => nv[key] !== ov[key])
       //   if (flag) {
-      //     this.multiple ? this.currentValue = [] : this.currentValue = null
       //     this.pageInit()
       //   }
       // }
@@ -99,11 +93,7 @@ export default {
       this.list = val
     },
     list (val) {
-      if (this.isDefault && val.length) {
-        if (!this.currentValue) {
-          this.currentValue = val[0][this.valueKey.value]
-        }
-      }
+      this.changeCurrentValue()
       const checkedItem = val.filter((item) => item.checked)
       if (!checkedItem.length || this.currentValue || (Array.isArray(this.currentValue) && this.currentValue.length)) return
       if (this.multiple) {
@@ -111,7 +101,6 @@ export default {
       } else {
         this.currentValue = checkedItem[0][this.valueKey.value]
       }
-      this.getCurrentObj()
     }
   },
   created () {
@@ -134,6 +123,27 @@ export default {
           this.currentValue = this.value.split(',')
         } else this.currentValue = []
       } else this.currentValue = this.value
+    },
+    changeCurrentValue () {
+      if (this.list.length) {
+        if (!this.multiple) {
+          this.currentValue !== null &&
+            this.currentValue !== undefined &&
+            this.currentValue !== '' &&
+            !this.list.some(obj => obj[this.valueKey.value] === this.currentValue) &&
+            (this.currentValue = null)
+        } else {
+          this.currentValue &&
+            this.currentValue.length &&
+            (this.currentValue = this.currentValue.filter(id => this.list.some(obj => obj[this.valueKey.value] === id)))
+        }
+      } else {
+        if (this.multiple) {
+          this.currentValue = []
+        } else {
+          this.currentValue = ''
+        }
+      }
     },
     pageInit () {
       const arr = Object.keys(this.params)
@@ -173,25 +183,11 @@ export default {
       this.loading = true
       this.getList({ ...this.params, ...otherData }, this.showMsg).then((res) => {
         let data = Array.isArray(res) ? res : (res.data || [])
-        if (data.length) {
-          if (!this.multiple) {
-            if (this.currentValue) {
-              let flag = data.some(obj => obj[this.valueKey.value] === this.currentValue)
-              if (!flag) {
-                this.currentValue = ''
-              }
-            }
-
-            if (!this.currentValue && this.isDefault) {
-              this.currentValue = data[0][this.valueKey.value]
-            }
-          }
-        }
         this.list = data
-        this.getCurrentObj()
         this.$emit('selectList', this.list)
         this.loading = false
       }).catch(err => {
+        this.list = []
         this.loading = false
         return Promise.reject(err)
       })
