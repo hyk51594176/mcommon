@@ -21,7 +21,9 @@
 </template>
 
 <script>
-
+import {
+  isDiff
+} from '../utils/index'
 export default {
   name: 'MSelect',
   props: {
@@ -69,20 +71,22 @@ export default {
     }
   },
   watch: {
-    params: {
-      handler (nv, ov) {
-        if (!nv) return
-        if (!ov) {
-          this.pageInit()
-        } else {
-          let flag = Object.keys(nv).some(key => nv[key] !== ov[key])
-          if (flag) {
-            this.multiple ? this.currentValue = [] : this.currentValue = null
-            this.pageInit()
-          }
-        }
-      },
-      deep: true
+    params (nv, ov) {
+      let flag = isDiff(nv, ov)
+      if (flag) {
+        this.multiple ? this.currentValue = [] : this.currentValue = null
+        this.pageInit()
+      }
+      // if (!nv) return
+      // if (!ov) {
+      //   this.pageInit()
+      // } else {
+      //   let flag = Object.keys(nv).some(key => nv[key] !== ov[key])
+      //   if (flag) {
+      //     this.multiple ? this.currentValue = [] : this.currentValue = null
+      //     this.pageInit()
+      //   }
+      // }
     },
     value (v) {
       this.setCurrentValue()
