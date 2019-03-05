@@ -1,29 +1,7 @@
-<template>
-  <el-select class="m-select"
-    v-model="currentValue"
-    :loading='loading'
-    loading-text="加载中"
-    :filterable='filterable'
-    :clearable='clearable'
-    :remote-method='remoteMethod'
-    :multiple='multiple'
-    @clear='remoteMethod'
-    v-on='$listeners'
-    v-bind="$attrs">
-    <el-option
-      v-for="item in list"
-      :key="item[valueKey.value]"
-      :label="item[valueKey.label]"
-      :value="item[valueKey.value]"
-      :disabled="item.disabled">
-    </el-option>
-  </el-select>
-</template>
 
-<script>
 import {
   isDiff
-} from '../utils/index.js'
+} from '../utils/index'
 export default {
   name: 'MSelect',
   props: {
@@ -32,14 +10,6 @@ export default {
       default () {
         return {}
       }
-    },
-    filterable: {
-      type: Boolean,
-      default: true
-    },
-    clearable: {
-      type: Boolean,
-      default: true
     },
     valueKey: {
       type: Object,
@@ -72,15 +42,6 @@ export default {
   watch: {
     params (nv, ov) {
       isDiff(nv, ov) && this.pageInit()
-      // if (!nv) return
-      // if (!ov) {
-      //   this.pageInit()
-      // } else {
-      //   let flag = Object.keys(nv).some(key => nv[key] !== ov[key])
-      //   if (flag) {
-      //     this.pageInit()
-      //   }
-      // }
     },
     value (v) {
       this.setCurrentValue()
@@ -192,6 +153,42 @@ export default {
         return Promise.reject(err)
       })
     }
+
+  },
+  render (h) {
+    const { list, valueKey, multiple, loading, currentValue, remoteMethod, $attrs, $listeners } = this
+    let listeners = {
+      ...$listeners,
+      clear: remoteMethod,
+      input: (val) => {
+        this.currentValue = val
+        $listeners.input && $listeners.input(val)
+      }
+    }
+    return h('el-select', {
+      props: {
+        loading: loading,
+        value: currentValue,
+        loadingText: '加载中',
+        filterable: true,
+        clearable: true,
+        remoteMethod: remoteMethod,
+        multiple: multiple,
+        ...$attrs
+      },
+      style: {
+        width: '100%'
+      },
+      on: listeners
+    }, [list.map(item => {
+      return h('el-option', {
+        props: {
+          label: item[valueKey.label],
+          value: item[valueKey.value],
+          disabled: item.disabled
+        },
+        key: item[valueKey.value]
+      })
+    })])
   }
 }
-</script>

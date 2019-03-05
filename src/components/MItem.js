@@ -1,70 +1,3 @@
-<template>
-  <el-input
-    v-if="componentType==='el-input'"
-    v-model.trim="modelComputed"
-    v-bind="column" v-on="column.listeners"
-     @blur="isForce=false" @focus='isForce=true'
-    :placeholder='column.placeholder!=undefined?column.placeholder:column.label'>
-    <div v-if="column.append" slot="append" :class="column.appendClass">
-      <slot :name="column.prop+'_append'">
-        <div @click='column.listeners.btnClick'>
-          <i :class="column.appendIcon"></i> {{column.appendText}}
-        </div>
-      </slot>
-    </div>
-  </el-input>
-  <el-select
-    v-model="modelComputed"
-    v-bind="column" v-on="column.listeners"
-    filterable
-    :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
-    v-else-if="componentType==='el-select'">
-    <el-option v-for="item in column.list"  :key="column.props?item[column.props.value]:item.Value" :label="column.Text?item[column.Text]:item.Text" :value="column.bindObj?item:item.Value">
-    </el-option>
-  </el-select>
-  <el-date-picker
-    v-model="modelComputed" v-bind="column" v-on="column.listeners"
-    :default-time='defaultTime'
-    :placeholder='column.placeholder!=undefined?column.placeholder:column.label'
-    :picker-options="column.pickerOptions||getpickerOptions(column.type,column.isNeedFast)"
-    v-else-if="componentType==='el-date-picker'">
-  </el-date-picker>
-  <el-input-number v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="componentType==='el-input-number'" />
-  <el-checkbox
-    v-model="modelComputed" v-bind="column" v-on="column.listeners"
-    v-else-if="componentType==='el-checkbox'">
-    {{column.Text}}
-  </el-checkbox>
-  <el-checkbox-group v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="componentType==='el-checkbox-group'">
-    <el-checkbox
-      :label="column.props?item[column.props.value]:item[valueKey.value]"
-      v-for='item in column.list' :key='item[valueKey.label]' v-bind="column" >
-      {{column.props?item[column.props.label]:item[valueKey.label]}}
-    </el-checkbox>
-  </el-checkbox-group>
-  <el-radio-group v-model="modelComputed" v-else-if="componentType==='el-radio'" v-bind="column" v-on="column.listeners">
-    <el-radio
-      :label="column.props?item[column.props.value]:item[valueKey.value]" v-bind="column"
-      v-for='item in column.list'
-      :key='item[valueKey.label]'>
-      {{column.props?item[column.props.label]:item[valueKey.label]}}
-    </el-radio>
-  </el-radio-group>
-  <el-cascader
-    v-model="modelComputed" v-bind="column" v-on="column.listeners" filterable
-    :placeholder='column.placeholder!=undefined?column.placeholder:column.label' v-else-if="componentType==='el-cascader'">
-  </el-cascader>
-  <el-switch v-model="modelComputed" v-bind="column" v-on="column.listeners" v-else-if="componentType==='el-switch'">
-  </el-switch>
-  <m-select
-    v-else-if="componentType==='m-select'" v-bind="column" v-on="column.listeners" v-model="modelComputed" :params='getParams(column)'></m-select>
-    <render-item v-else :row="row"
-    :value='modelComputed' :column='column'
-    :renderItem='column.render'
-    :format='column.format'
-    :index="index"/>
-</template>
-<script>
 const pickerOptions = {
   shortcuts: [{
     text: '今天',
@@ -122,42 +55,54 @@ const pickerOptions = {
     }
   }]
 }
+
+const createChildren = (h, el, column, valueKey) => {
+  const list = column.dataList || column.list || []
+  return list.map(item => {
+    return h(el, {
+      props: {
+        ...column,
+        label: column.props ? item[column.props.value] : item[valueKey.value]
+      },
+      key: item[valueKey.label]
+    }, column.props ? item[column.props.label] : item[valueKey.label])
+  })
+}
+
 export default {
   name: 'MItem',
   props: {
-    index: {
-      type: Number,
-      default: 0
+    row: {
+      type: Object,
+      required: true
     },
     column: {
       type: Object,
       required: true
     },
-    row: {
-      type: Object,
-      required: true
-    }
+    $index: Number
   },
-  inheritAttrs: false,
   data () {
     return {
       isForce: false
+    }
+  },
+  watch: {
+    row () {
+      if (this.$parent.clearValidate) {
+        this.$parent.clearValidate()
+      }
     }
   },
   computed: {
     componentType () {
       const { el } = this.column
       if (!el) return null
-      if (el === 'mSelect' || el === 'MSelect') {
+      if (el === 'mSelect' || el === 'MSelect' || el === 'select' || el === 'el-select') {
         return 'm-select'
       } else {
         return el.startsWith('el-') ? el : ('el-' + el)
       }
-    },
-    defaultTime () {
-      if (this.column.defaultTime) return this.column.defaultTime
-      if (this.column.type === 'daterange' || this.column.type === 'datetimerange') return ['00:00:00', '23:59:59']
-      return '00:00:00'
     },
     valueKey () {
       if (this.column.valueKey) return this.column.valueKey
@@ -202,10 +147,6 @@ export default {
       }
     }
   },
-  watch: {
-    'column.type': 'formatValue',
-    'column.multiple': 'formatValue'
-  },
   methods: {
     getStrFunction (str) {
       str = str.replace(/(\.\d)/g, '[$1]').replace(/\.\[/g, '[')
@@ -234,29 +175,15 @@ export default {
         }
       }
     },
-    formatValue () {
-      if (this.column.el === 'date-picker' || this.column.el === 'mSelect') {
-        let obj = this.row[this.column.prop]
-        if (this.column.type === 'daterange' || this.column.type === 'datetimerange' || this.column.multiple) {
-          if (!obj) {
-            this.row[this.column.prop] = []
-          } else if (!Array.isArray(obj)) {
-            this.row[this.column.prop] = obj.split(',')
-          }
-        } else {
-          if (Array.isArray(obj)) this.row[this.column.prop] = obj[0] ? obj[0] : null
-        }
-      }
-    },
-    getParams (obj) {
+    getParams () {
       let newObj = {}
-      if (obj.params && typeof obj.params === 'object') {
-        for (let key in obj.params) {
+      if (this.column.params && typeof this.column.params === 'object') {
+        for (let key in this.column.params) {
           let value
           try {
-            value = this.getStrFunction(`this.row.${obj.params[key]}`)
+            value = this.getStrFunction(`this.row.${this.column.params[key]}`)
           } catch (err) { }
-          newObj[key] = value !== undefined ? value : obj.params[key]
+          newObj[key] = value !== undefined ? value : this.column.params[key]
         }
       }
       return newObj
@@ -265,10 +192,6 @@ export default {
       if (type === 'daterange' && flag !== false) {
         return pickerOptions
       }
-    },
-    currentObj (data, key) {
-      if (this.column.listeners && this.column.listeners.currentObj) return
-      this.$emit('currentObj', data, key)
     },
     currency (value, currency = '¥', decimals = 2) {
       const digitsRE = /(\d{3})(?=\d)/g
@@ -292,6 +215,64 @@ export default {
       _int.slice(i).replace(digitsRE, '$1,') +
       _float
     }
+  },
+  render (h) {
+    const { row, $index, column, format, modelComputed, componentType, valueKey } = this
+    if (componentType) {
+      const placeholder = column.placeholder !== undefined
+        ? column.placeholder : column.label
+      let listeners = {
+        ...(column.listeners || {}),
+        input: (val) => {
+          this.modelComputed = val
+          column.listeners && column.listeners.input && column.listeners.input(val)
+        }
+      }
+      let arr = ['m-select', 'el-checkbox-group', 'el-radio-group']
+      if (arr.includes(componentType)) {
+        let children = componentType !== 'm-select'
+          ? createChildren(
+            h,
+            componentType === 'el-checkbox-group' ? 'el-checkbox' : 'el-radio',
+            column,
+            valueKey
+          ) : null
+        return h(componentType, {
+          props: {
+            ...column,
+            placeholder,
+            value: modelComputed
+          },
+          on: listeners
+        }, children)
+      } else {
+        if (componentType === 'el-input' && column.type === 'currency') {
+          listeners.blur = (...args) => {
+            this.isForce = false
+            column.listeners && column.listeners.blur && column.listeners.blur(...args)
+          }
+          listeners.focus = (...args) => {
+            this.isForce = true
+            column.listeners && column.listeners.focus && column.listeners.focus(...args)
+          }
+        }
+        return h(componentType, {
+          props: {
+            ...column,
+            filterable: true,
+            value: modelComputed
+          },
+          attrs: {
+            placeholder
+          },
+          on: listeners
+        })
+      }
+    } else {
+      const VNnode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
+      const text = (format ? format(row) : modelComputed)
+      if (VNnode) return VNnode
+      return h('span', null, text)
+    }
   }
 }
-</script>
