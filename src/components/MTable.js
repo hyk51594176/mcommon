@@ -1,72 +1,157 @@
-<template>
-  <div>
-    <el-table
-      :data="list"
-      :border='border'
-      :stripe="stripe"
-      :summary-method='summarymethod||summaryDefault'
-      :show-summary='isShowSummary'
-      @row-click='rowClick'
-      @cell-click='cellClick'
-      @selection-change="handleSelectionChange"
-      @sort-change='sortChange'
-      @current-change="currentChange"
-      ref='commontable' v-bind="$attrs" v-on="$listeners">
-      <el-table-column type="expand" v-if='expand && !isTree' >
-        <template slot-scope="scope">
-          <slot name='expand' :row='scope.row' :$index='scope.$index'/>
-        </template>
-      </el-table-column>
-      <el-table-column type="selection" :selectable='selectable' :reserve-selection='reserveSelection' align="center" v-if='(selection&&list.length)'>
-      </el-table-column>
-      <el-table-column :label="numTitle" align="center" width='60' v-if='showNum && list.length && !isTree' :fixed="numFiexd||(columns[0]&&columns[0].fixed)">
-        <template slot-scope='scope'>
-          <slot name='mnum'  :row='scope.row' :num="scope.$index+1+((page.pageNum-1)*page.pageSize)" :$index='scope.$index'>
-            <span style="margin-left: 10px">{{ scope.$index+1+((page.pageNum-1)*page.pageSize)}}</span>
-          </slot>
-        </template>
-      </el-table-column>
-      <slot></slot>
-      <template v-for='(obj,index) in columns'>
-        <el-table-column
-          v-bind="obj"
-          :class-name='obj.className||obj.el'
-          :align='obj.align||"center"'
-          :filter-method="obj.filters?filtetag.bind(null,obj):null"
-          :key='getKey(obj.prop)'>
-          <span slot-scope='scope' :class="isTree && index === 0?'first-columns':null">
-              <span v-if="scope.row.treeLevel && index === 0" :style="{minWidth:`${scope.row.treeLevel*15}px`}"></span>
-              <span v-if="scope.row.expandAll!==undefined && index === 0"  class="expan-icon" @click="expandClick(scope)">
-                <i :class="scope.row.expandAll?'el-icon-minus':'el-icon-plus'" ></i>&nbsp;
-              </span>
-              <slot :name='obj.prop' :row='scope.row' :$index='scope.$index' :column="obj">
-                <m-item
-                  :column='getColumns(obj,scope)'
-                  @currentObj='(data,key)=>currentObj(scope,data,key)'
-                  :row='scope.row' :index='scope.$index' class="m-item"/>
-              </slot>
-          </span>
-        </el-table-column>
-      </template>
-      <el-table-column :align="buttonAlign||'center'" :fixed="buttonFixed" :width="buttonWidth" :label='buttonLabel' v-if="$scopedSlots.button">
-        <template slot-scope='{ row, $index }'>
-          <slot :row='row' :$index='$index' name="button" ></slot>
-        </template>
-      </el-table-column>
-    </el-table>
-    <slot name='page'>
-      <el-pagination
-        style="text-align:right" v-if='showPage && !isTree'
-        :current-page="page.pageNum"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :page-sizes="pageSizes"
-        :page-size="page.pageSize" :layout="layout" :total="cTotal" />
-    </slot>
-  </div>
-</template>
-<script>
 import ExportCsv from '../utils/export-csv'
+import createTag from './createTag'
+const createDefault = function (h, scope, column, index) {
+  const { isTree, expandClick, getColumns } = this
+  const children = []
+  if (scope.row.treeLevel && index === 0) {
+    children.push(
+      h('span', {
+        style: {
+          minWidth: `${scope.row.treeLevel * 15}px`
+        }
+      })
+    )
+  }
+  if (scope.row.expandAll !== undefined && index === 0) {
+    children.push(
+      h('span', null, [h('i', {
+        class: {
+          'el-icon-minus': scope.row.expandAll,
+          'el-icon-plus': !scope.row.expandAll
+        },
+        style: {
+          cursor: 'pointer',
+          fontWeight: 900,
+          fontSize: '13px',
+          marginRight: '10px'
+        },
+        on: {
+          click: expandClick.bind(null, scope)
+        }
+      })])
+    )
+  }
+  children.push(createTag.call(this, h, {
+    column: getColumns(column, scope),
+    row: scope.row,
+    $index: scope.$index
+  }))
+  return h('span', {
+    style: {
+      display: isTree && index === 0 ? 'flex' : null
+    }
+  }, children)
+}
+const createTable = function (h) {
+  const {
+    list, stripe,
+    border, summarymethod,
+    summaryDefault, isShowSummary,
+    $listeners,
+    $attrs,
+    expand,
+    isTree,
+    selection,
+    selectable,
+    showNum,
+    reserveSelection,
+    numTitle,
+    numFiexd,
+    page,
+    columns,
+    filtetag,
+    getKey
+  } = this
+  const children = []
+  if (expand && !isTree) {
+    children.push(h('el-table-column', {
+      props: {
+        type: 'expand'
+      },
+      scopedSlots: {
+        default: this.$scopedSlots.expand ? props => this.$scopedSlots.expand(props) : null
+      }
+    }))
+  }
+  if (selection && list.length) {
+    children.push(
+      h('el-table-column', {
+        props: {
+          type: 'selection',
+          selectable,
+          reserveSelection
+        }
+      })
+    )
+  }
+  if (showNum && list.length && !isTree) {
+    const getNum = scope => scope.$index + 1 + ((page.pageNum - 1) * page.pageSize)
+    children.push(
+      h('el-table-column', {
+        props: {
+          label: numTitle,
+          align: 'center',
+          width: 60,
+          reserveSelection,
+          fixed: numFiexd || (columns[0] && columns[0].fixed)
+        },
+        scopedSlots: {
+          default: this.$scopedSlots.mnum ? props => this.$scopedSlots.mnum({ ...props, num: getNum(props) }) : props => getNum(props)
+        }
+      })
+    )
+  }
+  return h('el-table', {
+    props: {
+      data: list,
+      border,
+      stripe,
+      summarymethod: summarymethod || summaryDefault,
+      showSummary: isShowSummary,
+      ...$attrs
+    },
+    on: $listeners
+  }, [].concat(children, this.$children, columns.map((obj, index) => {
+    return h('el-table-column', {
+      props: {
+        ...obj,
+        className: obj.className || obj.el,
+        align: obj.align || 'center',
+        filterMethod: obj.filters ? filtetag.bind(null, obj) : null
+      },
+      key: getKey(obj.prop),
+      scopedSlots: {
+        default: props => createDefault.call(this, h, props, obj, index)
+      }
+    })
+  })))
+}
+const createpagPination = function (h) {
+  const { showPage, isTree, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
+  if (this.$scopedSlots.page) {
+    return this.$scopedSlots.page()
+  }
+  if (showPage && !isTree) {
+    return h('el-pagination', {
+      props: {
+        currentPage: page.pageNum,
+        pageSize: page.pageSize,
+        pageSizes,
+        layout,
+        total: cTotal
+      },
+      on: {
+        'size-change': handleSizeChange,
+        'current-change': handleCurrentChange
+
+      },
+      style: {
+        textAlign: 'right'
+      }
+    })
+  }
+  return null
+}
 export default {
   name: 'MTable',
   props: {
@@ -170,10 +255,6 @@ export default {
     list () {
       if (this.isTree) return this.treeData
       const t = this.total || (this.page && this.page.total)
-      // if (this.showPage) return this.tableData
-      // if (!this.showPage && !t) {
-      //   return this.tableData
-      // }
       if (this.showPage || !t) {
         return this.tableData
       }
@@ -351,6 +432,11 @@ export default {
     currentObj (scope, data, key) {
       this.$emit('currentObj', scope.row, data, key, scope.$index)
     }
+  },
+  render (h) {
+    return h('div', null, [
+      createTable.call(this, h),
+      createpagPination.call(this, h)
+    ])
   }
 }
-</script>
