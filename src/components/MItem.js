@@ -217,7 +217,7 @@ export default {
     }
   },
   render (h) {
-    const { row, $index, column, format, modelComputed, componentType, valueKey } = this
+    const { row, $index, column, modelComputed, componentType, valueKey } = this
     if (componentType) {
       const placeholder = column.placeholder !== undefined
         ? column.placeholder : column.label
@@ -270,7 +270,7 @@ export default {
       }
     } else {
       const VNnode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
-      const text = (format ? format(row) : modelComputed)
+      const text = (column.format ? column.format(row) : modelComputed)
       if (VNnode) return VNnode
       return h('span', null, text)
     }
