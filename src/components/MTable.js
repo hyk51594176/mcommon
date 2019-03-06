@@ -105,7 +105,6 @@ const createTable = function (h) {
       })
     )
   }
-
   if (this.$scopedSlots.button) {
     children.push(h('el-table-column', {
       props: {
@@ -119,6 +118,9 @@ const createTable = function (h) {
       }
     }))
   }
+
+  let eventFun = { ...$listeners }
+  if (eventFun.selectionChange)eventFun['selection-change'] = eventFun.selectionChange
   return h('el-table', {
     props: {
       data: list,
@@ -128,7 +130,8 @@ const createTable = function (h) {
       showSummary: isShowSummary,
       ...$attrs
     },
-    on: $listeners
+    ref: 'commontable',
+    on: eventFun
   }, [].concat(children, this.$children, columns.map((obj, index) => {
     return h('el-table-column', {
       props: {
@@ -161,7 +164,6 @@ const createpagPination = function (h) {
       on: {
         'size-change': handleSizeChange,
         'current-change': handleCurrentChange
-
       },
       style: {
         textAlign: 'right'
@@ -417,38 +419,12 @@ export default {
     clearSelection () {
       this.$refs.commontable.clearSelection()
     },
-    handleSelectionChange (arr) {
-      if (this.$listeners['selection-change']) return
-      this.$emit('selectionChange', arr)
-    },
-    sortChange (sortObj) {
-      if (this.$listeners['sort-change']) return
-      this.$emit('sortChange', sortObj)
-    },
-    rowClick (row, event, column) {
-      if (this.$listeners['row-click']) return
-      this.$emit('rowClick', row, event, column)
-    },
-    cellClick (row, event, column) {
-      if (this.$listeners['cell-click']) return
-      this.$emit('cellClick', row, event, column)
-    },
-    currentChange (val) {
-      if (this.$listeners['current-change']) return
-      this.$emit('currentChange', val)
-    },
     filtetag (column, value, row) {
       if (typeof column.filterMethod === 'function') {
         return column.filterMethod(column, value, row)
       } else {
         return row[column.prop] === value
       }
-    },
-    goto (obj) {
-      this.$emit('gotolink', obj)
-    },
-    currentObj (scope, data, key) {
-      this.$emit('currentObj', scope.row, data, key, scope.$index)
     }
   },
   render (h) {
