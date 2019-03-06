@@ -60,7 +60,11 @@ const createTable = function (h) {
     page,
     columns,
     filtetag,
-    getKey
+    getKey,
+    buttonWidth,
+    buttonAlign,
+    buttonFixed,
+    buttonLabel
   } = this
   const children = []
   if (expand && !isTree) {
@@ -100,6 +104,20 @@ const createTable = function (h) {
         }
       })
     )
+  }
+
+  if (this.$scopedSlots.button) {
+    children.push(h('el-table-column', {
+      props: {
+        width: buttonWidth,
+        align: buttonAlign || 'center',
+        fixed: buttonFixed,
+        label: buttonLabel
+      },
+      scopedSlots: {
+        default: props => this.$scopedSlots.button(props)
+      }
+    }))
   }
   return h('el-table', {
     props: {
