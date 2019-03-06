@@ -217,7 +217,7 @@ export default {
     }
   },
   render (h) {
-    const { row, $index, column, modelComputed, componentType, valueKey } = this
+    const { row, $index, column, modelComputed, componentType, valueKey, getParams } = this
     if (componentType) {
       const placeholder = column.placeholder !== undefined
         ? column.placeholder : column.label
@@ -241,6 +241,7 @@ export default {
           props: {
             ...column,
             placeholder,
+            params: componentType === 'm-select' ? getParams(column) : null,
             value: modelComputed
           },
           on: listeners
