@@ -273,10 +273,8 @@ export default {
         })
       }
     } else {
-      const VNnode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
-      const text = (column.format ? column.format(row) : modelComputed)
-      if (VNnode) return VNnode
-      return h('span', null, text)
+      const VNode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
+      return VNode || h('span', null, column.format ? column.format(row) : modelComputed)
     }
   }
 }
