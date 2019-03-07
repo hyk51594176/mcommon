@@ -263,7 +263,7 @@ export default {
   inheritAttrs: false,
   data () {
     return {
-      treeData: this.formatTreeData(this.tableData)
+      treeData: this.isTree ? this.formatTreeData(this.tableData) : []
     }
   },
   computed: {
