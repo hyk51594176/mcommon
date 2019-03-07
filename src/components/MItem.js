@@ -228,6 +228,9 @@ export default {
           column.listeners && column.listeners.input && column.listeners.input(val)
         }
       }
+      if (column.listeners.currentObj) {
+        listeners.currentObj = data => column.listeners.currentObj(data, row, $index)
+      }
       let arr = ['m-select', 'el-checkbox-group', 'el-radio-group']
       if (arr.includes(componentType)) {
         let children = componentType !== 'm-select'
