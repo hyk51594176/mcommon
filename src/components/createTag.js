@@ -4,8 +4,7 @@ export default function (h, { column, row = {}, $index }) {
   if (column.prop && scopedSlots[column.prop]) {
     VNode = scopedSlots[column.prop]({ row, column, $index })
   }
-  if (VNode) return VNode
-  return h('MItem', {
+  return VNode || h('MItem', {
     props: {
       row,
       column,
