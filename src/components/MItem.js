@@ -90,7 +90,7 @@ export default {
   watch: {
     row () {
       if (this.$parent.clearValidate) {
-        this.$parent.clearValidate()
+        this.$nextTick(this.$parent.clearValidate)
       }
     }
   },
