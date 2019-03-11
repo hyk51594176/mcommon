@@ -30,7 +30,7 @@ export default {
     showMsg: Boolean,
     getList: Function
   },
-  inheritAttrs: false,
+  // inheritAttrs: false,
   data () {
     return {
       list: [],
@@ -165,6 +165,10 @@ export default {
         $listeners.input && $listeners.input(val)
       }
     }
+    let options = {
+      ...$attrs
+    }
+    delete options.valueKey
     return h('el-select', {
       props: {
         loading: loading,
@@ -174,7 +178,7 @@ export default {
         clearable: true,
         remoteMethod: remoteMethod,
         multiple: multiple,
-        ...$attrs
+        ...options
       },
       style: {
         width: '100%'
