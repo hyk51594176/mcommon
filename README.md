@@ -125,7 +125,10 @@ export default {
   }),
   methods:{
     getList(){
+      this.$refs.mform.validate().then(()=>{
 
+        
+      })
     },
     addData(){
 
