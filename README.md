@@ -122,7 +122,21 @@ export default {
         label: '操作'
       }
     ] 
-  })
+  }),
+  methods:{
+    getList(){
+
+    },
+    addData(){
+
+    },
+    delData(){
+
+    },
+    editData(){
+
+    },
+  }
 }
 
 // 其他配置参数请看element-ui
