@@ -139,5 +139,5 @@ export default {
   }
 }
 
-// 其他配置参数请看element-ui
+// 其他配置参数请参照项目源码
 ```
