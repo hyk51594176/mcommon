@@ -18,13 +18,13 @@ Vue.use(mcommon)
 
 ```html
 <template>
-  <m-form slot="search" :formData="formData" :columns="formColumns" ref="mform">
+  <m-form :formData="formData" :columns="formColumns" ref="mform">
     <template #btn">
       <el-button type="primary" icon="el-icon-search" @click="getList">查询</el-button>
       <el-button type="primary" icon="el-icon-plus" @click="addData">新增</el-button>
     </template>
   </m-form>
-  <m-table :tableData="tableData" :columns="tableColumns" slot="table" >
+  <m-table :tableData="tableData" :columns="tableColumns"  >
     <template  #btn='scope'>
       <el-button  type="text"  @click="delData(scope.row)">删除</el-button>
       <el-button  type="text"  @click="editData(scope.row)">
