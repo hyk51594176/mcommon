@@ -260,6 +260,16 @@ export default {
             column.listeners && column.listeners.focus && column.listeners.focus(...args)
           }
         }
+        let slots = column.slots || {}
+        let children = Object.keys(slots).map(key => {
+          if (typeof slots[key] !== 'function') throw new Error(`slots ${key} 必须为函数返回VNode`)
+          let VNode = slots[key](h, { row, column, $index })
+          VNode.data = {
+            slot: key
+          }
+          return VNode
+        })
+
         return h(componentType, {
           props: {
             ...column,
@@ -270,7 +280,7 @@ export default {
             placeholder
           },
           on: listeners
-        })
+        }, children)
       }
     } else {
       const VNode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
