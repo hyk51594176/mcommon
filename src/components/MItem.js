@@ -265,6 +265,7 @@ export default {
           if (typeof slots[key] !== 'function') throw new Error(`slots ${key} 必须为函数返回VNode`)
           let VNode = slots[key](h, { row, column, $index })
           VNode.data = {
+            ...(VNode.data || {}),
             slot: key
           }
           return VNode
