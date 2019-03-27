@@ -299,7 +299,6 @@ export default {
       if (this.isTree) this.treeData = this.formatTreeData(this.tableData)
     }
   },
-
   methods: {
     formatTreeData (data, level = 0, arr = []) {
       data.forEach(obj => {
