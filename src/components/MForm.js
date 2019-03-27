@@ -1,5 +1,5 @@
 import createTag from './createTag'
-const labelWidth = '100px'
+const defaultWidth = '100px'
 const createRow = function (h) {
   const { columns = [], elRow } = this.data.attrs
   return h('el-row', elRow, columns.map(column => createCol.call(this, h, column)))
@@ -7,7 +7,7 @@ const createRow = function (h) {
 
 const createCol = function (h, column) {
   let xs = { span: 22 }
-  const { noWrap, model, formData } = this.data.attrs
+  const { noWrap, model, formData, labelWidth } = this.data.attrs
   if (noWrap !== undefined) {
     xs = {}
   }
@@ -21,7 +21,7 @@ const createCol = function (h, column) {
   }, [h('el-form-item', {
     props: {
       ...column,
-      labelWidth: !column.label ? '10px' : column.labelWidth || labelWidth
+      labelWidth: (!column.label && !column.labelWidth) ? '10px' : column.labelWidth || labelWidth
     }
   }, [createTag.call(this, h, {
     column,
@@ -37,7 +37,7 @@ export default {
       context.data.attrs.model = context.data.attrs.formData
     }
     if (!context.data.attrs.labelWidth) {
-      context.data.attrs.labelWidth = labelWidth
+      context.data.attrs.labelWidth = defaultWidth
     }
     if (context.data.attrs) {
       const VNode = h('el-form', context.data, [createRow.call(context, h)])

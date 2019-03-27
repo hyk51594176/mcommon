@@ -132,7 +132,7 @@ export default {
           } else {
             isNumber = this.column.rules.type === 'number'
           }
-          if (isNumber && !isNaN(value)) value = Number(value)
+          if (isNumber && !isNaN(value) && this.componentType === 'el-input') value = Number(value)
         }
         if (this.column.type === 'currency') {
           isNaN(value) ? (value = 0) : (value = Number(value))
@@ -247,6 +247,7 @@ export default {
             params: componentType === 'm-select' ? getParams(column) : null,
             value: modelComputed
           },
+          attrs: column,
           on: listeners
         }, children)
       } else {
@@ -275,7 +276,8 @@ export default {
           props: {
             ...column,
             filterable: true,
-            value: modelComputed
+            value: modelComputed,
+            label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : column.label
           },
           attrs: {
             placeholder
@@ -285,7 +287,11 @@ export default {
       }
     } else {
       const VNode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
-      return VNode || h('span', null, column.format ? column.format(row) : modelComputed)
+      return VNode || h('span', {
+        style: {
+          'word-break': 'break-all'
+        }
+      }, column.format ? column.format(row) : modelComputed)
     }
   }
 }
