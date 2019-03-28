@@ -84,6 +84,7 @@ const createTable = function (h) {
     buttonFixed,
     buttonLabel,
     mergeRow,
+    mergeColumn,
     arraySpanMethod,
     spanMethod
   } = this
@@ -149,7 +150,7 @@ const createTable = function (h) {
       stripe,
       summarymethod: summarymethod || summaryDefault,
       showSummary: isShowSummary,
-      spanMethod: mergeRow ? arraySpanMethod : spanMethod,
+      spanMethod: (mergeRow.length || mergeColumn.length) ? arraySpanMethod : spanMethod,
       ...$attrs
     },
     ref: 'commontable',
@@ -269,7 +270,14 @@ export default {
         return [15, 30, 45, 60]
       }
     },
-    mergeRow: Array,
+    mergeRow: {
+      type: Array,
+      default: () => []
+    },
+    mergeColumn: {
+      type: Array,
+      default: () => []
+    },
     spanMethod: Function
   },
   inheritAttrs: false,
@@ -303,9 +311,9 @@ export default {
     isShowSummary () {
       return this.columns.some(obj => obj.isSummary)
     },
-    mergeData () {
+    mergeRowData () {
       if (!this.mergeRow.length) return {}
-      return this.mergeRow.reduce((x, y, index) => {
+      return this.mergeRow.reduce((x, y) => {
         let firstIndex
         x[y] = this.list.reduce((l, r, i) => {
           let obj = {
@@ -458,16 +466,34 @@ export default {
         return row[column.prop] === value
       }
     },
-    arraySpanMethod ({ column, rowIndex }) {
-      let arr = column.property ? this.mergeData[column.property] : null
+    arraySpanMethod ({ row, column, rowIndex }) {
+      let arr = column.property ? this.mergeRowData[column.property] : null
+
+      let rowspan = 1; let colspan = 1
       if (arr) {
-        let rowspan = arr[rowIndex].row
-        let colspan = rowspan > 0 ? 1 : 0
-        return {
-          rowspan,
-          colspan
+        rowspan = arr[rowIndex].row
+      }
+      if (this.mergeColumn.length) {
+        if (this.mergeColumn.indexOf(column.property) > -1) {
+          let props = this.columns.map(obj => obj.prop)
+          let index = props.indexOf(column.property)
+          let canmerge = true
+          colspan = props.reduce((x, y, i) => {
+            if (i > index && canmerge) {
+              if (row[y] === undefined) {
+                x += 1
+              } else {
+                canmerge = false
+              }
+            }
+            return x
+          }, 1)
+        } else if (column.property && row[column.property] === undefined) {
+          colspan = 0
         }
       }
+
+      return [rowspan, colspan]
     }
   },
   render (h) {
