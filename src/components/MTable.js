@@ -82,7 +82,10 @@ const createTable = function (h) {
     buttonWidth,
     buttonAlign,
     buttonFixed,
-    buttonLabel
+    buttonLabel,
+    mergeRow,
+    arraySpanMethod,
+    spanMethod
   } = this
   const children = []
   if (expand && !isTree) {
@@ -146,6 +149,7 @@ const createTable = function (h) {
       stripe,
       summarymethod: summarymethod || summaryDefault,
       showSummary: isShowSummary,
+      spanMethod: mergeRow ? arraySpanMethod : spanMethod,
       ...$attrs
     },
     ref: 'commontable',
@@ -264,7 +268,9 @@ export default {
       default () {
         return [15, 30, 45, 60]
       }
-    }
+    },
+    mergeRow: Array,
+    spanMethod: Function
   },
   inheritAttrs: false,
   data () {
@@ -296,6 +302,27 @@ export default {
     },
     isShowSummary () {
       return this.columns.some(obj => obj.isSummary)
+    },
+    mergeData () {
+      if (!this.mergeRow.length) return {}
+      return this.mergeRow.reduce((x, y, index) => {
+        let firstIndex
+        x[y] = this.list.reduce((l, r, i) => {
+          let obj = {
+            row: 1,
+            [y]: r[y]
+          }
+          if (i !== 0 && r[y] === l[i - 1][y]) {
+            obj.row = 0
+            l[firstIndex].row += 1
+          } else {
+            firstIndex = i
+          }
+          l.push(obj)
+          return l
+        }, [])
+        return x
+      }, {})
     }
   },
   watch: {
@@ -429,6 +456,17 @@ export default {
         return column.filterMethod(column, value, row)
       } else {
         return row[column.prop] === value
+      }
+    },
+    arraySpanMethod ({ column, rowIndex }) {
+      let arr = column.property ? this.mergeData[column.property] : null
+      if (arr) {
+        let rowspan = arr[rowIndex].row
+        let colspan = rowspan > 0 ? 1 : 0
+        return {
+          rowspan,
+          colspan
+        }
       }
     }
   },
