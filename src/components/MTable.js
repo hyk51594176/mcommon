@@ -1,6 +1,6 @@
 import ExportCsv from '../utils/export-csv'
 import createTag from './createTag'
-const createDefault = function (h, scope, column, index) {
+const createDefault = function (h, { scope, column, index }) {
   const { isTree, expandClick, getColumns } = this
   const children = []
   if (scope.row.treeLevel && index === 0) {
@@ -42,6 +42,26 @@ const createDefault = function (h, scope, column, index) {
     }
   }, children)
 }
+
+const createTableColumn = function (h, columns) {
+  const { filtetag, getKey } = this
+  return columns.map((column, index) => {
+    let children = column.children || []
+    return h('el-table-column', {
+      props: {
+        ...column,
+        className: column.className || column.el,
+        align: column.align || 'center',
+        filterMethod: column.filters ? filtetag.bind(null, column) : null
+      },
+      key: getKey(column.prop),
+      scopedSlots: {
+        default: scope => createDefault.call(this, h, { scope, column, index })
+      }
+    }, createTableColumn.call(this, h, children))
+  })
+}
+
 const createTable = function (h) {
   const {
     list, stripe,
@@ -59,8 +79,6 @@ const createTable = function (h) {
     numFiexd,
     page,
     columns,
-    filtetag,
-    getKey,
     buttonWidth,
     buttonAlign,
     buttonFixed,
@@ -132,21 +150,9 @@ const createTable = function (h) {
     },
     ref: 'commontable',
     on: eventFun
-  }, [].concat(children, this.$children, columns.map((obj, index) => {
-    return h('el-table-column', {
-      props: {
-        ...obj,
-        className: obj.className || obj.el,
-        align: obj.align || 'center',
-        filterMethod: obj.filters ? filtetag.bind(null, obj) : null
-      },
-      key: getKey(obj.prop),
-      scopedSlots: {
-        default: props => createDefault.call(this, h, props, obj, index)
-      }
-    })
-  })))
+  }, [].concat(children, this.$children, createTableColumn.call(this, h, columns)))
 }
+
 const createpagPination = function (h) {
   const { showPage, isTree, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
   if (this.$scopedSlots.page) {
