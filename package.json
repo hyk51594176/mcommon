@@ -6,7 +6,9 @@
   "scripts": {
     "build": "rollup -c",
     "release": "npm run build && npm run pub",
-    "pub": "npm publish --access public"
+    "pub": "npm publish --access public",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "author": "51594176@qq.com",
   "license": "MIT",
@@ -21,31 +23,30 @@
     "node": ">=4",
     "npm": ">=3"
   },
-  "dependencies": {
-    "element-ui": "^2.4.4"
-  },
   "homepage": "https://github.com/hyk51594176/mComponent",
   "devDependencies": {
-    "autoprefixer": "^9.0.1",
     "babel-core": "^6.26.3",
-    "babel-plugin-component": "^1.1.1",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-syntax-jsx": "^6.18.0",
-    "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
     "change-case": "^3.0.2",
     "create-banner": "^1.0.0",
-    "cssnano": "^4.0.4",
+    "element-ui": "^2.7.0",
     "rollup": "^0.59.1",
     "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-eslint": "^5.0.0",
-    "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-uglify": "^3.0.0",
-    "rollup-plugin-vue": "^4.3.1",
-    "vue-template-compiler": "^2.5.16"
+    "vuepress": "^0.14.10",
+    "webpack-dev-middleware": "3.6.0",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0"
+  },
+  "resolutions": {
+    "webpack-dev-middleware": "3.6.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    
   }
 }
