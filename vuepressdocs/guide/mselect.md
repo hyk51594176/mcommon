@@ -23,7 +23,7 @@ currentObj|当前选中或清除时回调| 当前选中的数据 object、null
 
 <demo-block>
 <example-mselect-demo1 slot="source"/>
- <<< @/docs/.vuepress/components/example/mselect/demo1.vue
+ <<< @/vuepressdocs/.vuepress/components/example/mselect/demo1.vue
 </demo-block>
 
  

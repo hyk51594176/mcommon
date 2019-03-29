@@ -3,4 +3,5 @@ rollup.config.js
 .babelrc
 .vscode
 .src
-.docs
+/docs/
+/vuepressdocs/
