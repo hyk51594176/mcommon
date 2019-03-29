@@ -21,11 +21,11 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "c5c92a306d3df67fb190c03aa02ee201"
+    "revision": "7d0947b8ca3624869ccbea8dace37d3f"
   },
   {
-    "url": "assets/css/0.styles.ad2c5b9e.css",
-    "revision": "fd66078c298f0dbb55eb3f593b405d9d"
+    "url": "assets/css/0.styles.7651ae03.css",
+    "revision": "62a1eeec751fe33b6b13f6552090ff15"
   },
   {
     "url": "assets/fonts/element-icons.6f0a7632.ttf",
@@ -68,28 +68,28 @@ self.__precacheManifest = [
     "revision": "09d631c2ab1084167a11f251ba0c2253"
   },
   {
-    "url": "assets/js/app.4044468c.js",
-    "revision": "59c9d45eceed2fbf679238f98d089cf3"
+    "url": "assets/js/app.dfffa541.js",
+    "revision": "a3753287e4d0c53b0984682e662aba75"
   },
   {
     "url": "guide/index.html",
-    "revision": "d61ac6182a3a7ee4f1752e62f0e894a0"
+    "revision": "ee2d56e930a12f4fa067b90ad4e4ae9d"
   },
   {
     "url": "guide/mform.html",
-    "revision": "a954e2ca962b46deada1af0094dbd4d5"
+    "revision": "ae07f36ad869a51d55907d059c8b055e"
   },
   {
     "url": "guide/mselect.html",
-    "revision": "35b57e2e20056fab0ff7195875ae649e"
+    "revision": "abd93b8b9e03d87c86179c08f2e98b90"
   },
   {
     "url": "guide/mtable.html",
-    "revision": "9367ffee99246d5c29debb44698b5308"
+    "revision": "2f31e8136a793b76bcc132a441fe1e0a"
   },
   {
     "url": "index.html",
-    "revision": "34186f51bf75670923b25d121e8be89a"
+    "revision": "bcd5238c83ac5871787a354e541c3cfd"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
