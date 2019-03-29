@@ -1,5 +1,4 @@
 <template>
-import { debug } from 'util';
   <ul class="demo-select">
     <li class="li">
       <label>基本用法</label>
@@ -18,10 +17,6 @@ import { debug } from 'util';
         :value-key="valueKey"
         :get-list="getList"
       ></m-select>
-    </li>
-    <li class="li">
-      <label>selectList事件：{{selectList}}</label>
-      <label>currentObjt事件: {{activeObj}}</label>
     </li>
     <br>
     <li class="li">
@@ -55,8 +50,6 @@ export default {
     return {
       value: null,
       value1: [],
-      selectList:[],
-      activeObj:null,
       valueKey: {
         label: "name",
         value: "id"
@@ -101,10 +94,10 @@ export default {
       return Promise.resolve(this.dataList);
     },
     setSelectList(arr) {
-      this.selectList =arr
+       console.log('setSelectList',arr)
     },
     currentObj(obj) {
-      this.activeObj = obj
+       console.log('currentObj',obj)
     }
   }
 };
