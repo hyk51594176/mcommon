@@ -4,7 +4,6 @@ module.exports = {
   base: '/mcommon/',
   title: 'mcommon',
   description: '基于element-ui form、table二次封装，支持原table和form的所有功能。',
-  serviceWorker: true,
   dest:path.resolve(__dirname,'../../docs/'),
   themeConfig: {
     repo: 'hyk51594176/mcommon',

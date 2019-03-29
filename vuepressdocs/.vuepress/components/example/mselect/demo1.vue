@@ -2,45 +2,49 @@
   <ul class="demo-select">
     <li class="li">
       <label>基本用法</label>
-      <m-select v-model="value" :data-list="dataList" :value-key="valueKey"></m-select>
+      <m-select v-model="value" :data-list="dataList" ></m-select>
     </li>
     <li class="li">
       <label>异步获取数据</label>
-      <m-select v-model="value" :value-key="valueKey" :get-list="getList"></m-select>
+      <m-select v-model="value"  :get-list="getList"></m-select>
+    </li>
+    <li class="li">
+      <label>远程搜索</label>
+      <m-select v-model="value"  :get-list="remoteMethod" remote></m-select>
     </li>
     <li class="li">
       <label>扩展事件</label>
       <m-select
         v-model="value"
         @selectList="setSelectList"
-        @currentObj="currentObj"
-        :value-key="valueKey"
+        @currentObj="currentObj"  
         :get-list="getList"
+        :params='params'
       ></m-select>
     </li>
-    <br>
     <li class="li">
       <label>自定义模板</label>
-      <m-select v-model="value" :data-list="dataList" :custom-render="customRender"></m-select>
+      <m-select v-model="value" :data-list="dataList"   :custom-render="customRender"></m-select>
     </li>
+
+    
     <li class="li">
       <label>禁用</label>
-      <m-select v-model="value" :data-list="dataList" :custom-render="customRender" disabled></m-select>
+      <m-select v-model="value" :data-list="dataList"   :custom-render="customRender" disabled></m-select>
     </li>
     <li class="li">
       <label>基础多选</label>
-      <m-select v-model="value1" multiple :data-list="dataList" :value-key="valueKey"></m-select>
+      <m-select v-model="value1" multiple :data-list="dataList" ></m-select>
     </li>
     <li class="li">
-      <label>基础多选</label>
+      <label>基础多选自定义模板</label>
       <m-select
         v-model="value1"
         multiple
         :data-list="dataList"
         :custom-render="customRender"
-        :value-key="valueKey"
         collapse-tags
-      ></m-select>
+      ></m-select> 
     </li>
   </ul>
 </template>
@@ -50,48 +54,64 @@ export default {
     return {
       value: null,
       value1: [],
-      valueKey: {
-        label: "name",
-        value: "id"
-      },
       dataList: [
         {
-          id: "选项1",
-          name: "黄金糕",
+          value: "选项1",
+          label: "黄金糕",
           disabled: true
         },
         {
-          id: "选项2",
-          name: "双皮奶"
+          value: "选项2",
+          label: "双皮奶"
         },
         {
-          id: "选项3",
-          name: "蚵仔煎"
+          value: "选项3",
+          label: "蚵仔煎"
         },
         {
-          id: "选项4",
-          name: "龙须面"
+          value: "选项4",
+          label: "龙须面"
         },
         {
-          id: "选项5",
-          name: "北京烤鸭"
+          value: "选项5",
+          label: "北京烤鸭"
         }
-      ]
+      ],
+      params:{
+        id:1
+      }
     };
   },
   methods: {
     customRender(h, item) {
       return (
         <div>
-          <span style="float: left">{item.name}</span>
+          <span style="float: left">{item.label}</span>
           <span style="float: right; color: #8492a6; font-size: 13px">
-            {item.id}
+            {item.value}
           </span>
         </div>
       );
     },
-    getList() {
-      return Promise.resolve(this.dataList);
+    getList(params) {
+      console.log('getList 参数',params)
+      return  new Promise(reslove=>{
+        setTimeout(()=>{
+           reslove(this.dataList)
+        },2000)
+      })
+    },
+     remoteMethod(params) {
+      console.log('remoteMethod 参数',params)
+      return  new Promise(reslove=>{
+        setTimeout(()=>{
+          if(params.keyWord){
+           reslove(this.dataList)
+          }else{
+           reslove([])
+          }
+        },2000)
+      })
     },
     setSelectList(arr) {
        console.log('setSelectList',arr)
@@ -109,7 +129,7 @@ export default {
     display: flex;
   }
   label {
-    width: 150px;
+    width: 200px;
     text-align: right;
     padding: 0 8px;
   }
