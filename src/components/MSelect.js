@@ -135,9 +135,9 @@ export default {
       this.selectObj = currentObj
       this.$emit('currentObj', currentObj)
     },
-    remoteMethod (query) {
+    remoteMethod (keyWord) {
       if (this.$attrs.remote !== undefined && this.$attrs.remote !== false && this.$attrs.remote !== null) {
-        this.getData({ keyWord: query })
+        this.getData({ keyWord })
       }
     },
     getData (otherData = {}) {
