@@ -260,7 +260,8 @@ export default {
       default () {
         return {
           pageNum: 1,
-          pageSize: 15
+          pageSize: 15,
+          total: 0
         }
       }
     },
@@ -449,7 +450,7 @@ export default {
       this.page.pageNum = val
       this.$emit('pageChange', this.page)
     },
-    toggleRowSelection (rows, type) {
+    toggleRowSelection (rows = [], type) {
       this.$nextTick(() => {
         rows.forEach(row => {
           this.$refs.commontable.toggleRowSelection(row, type)

@@ -12,7 +12,7 @@ const install = function (Vue) {
   Vue.component(MSelect.name, MSelect)
   Vue.component(MTable.name, MTable)
 }
-if (window.Vue) {
+if (window && window.Vue) {
   install(window.Vue)
 }
 export default {
