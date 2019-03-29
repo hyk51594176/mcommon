@@ -13,7 +13,7 @@ import { debug } from 'util';
       <label>扩展事件</label>
       <m-select
         v-model="value"
-        @selectList="selectList"
+        @selectList="setSelectList"
         @currentObj="currentObj"
         :value-key="valueKey"
         :get-list="getList"
@@ -21,7 +21,7 @@ import { debug } from 'util';
     </li>
     <li class="li">
       <label>selectList事件：{{selectList}}</label>
-      <label>currentObjt事件{{activeObj}}</label>
+      <label>currentObjt事件: {{activeObj}}</label>
     </li>
     <br>
     <li class="li">
@@ -100,8 +100,7 @@ export default {
     getList() {
       return Promise.resolve(this.dataList);
     },
-    selectList(arr) {
-      console.log('select')
+    setSelectList(arr) {
       this.selectList =arr
     },
     currentObj(obj) {

@@ -21,7 +21,7 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "7d0947b8ca3624869ccbea8dace37d3f"
+    "revision": "3f472095baae13aeea5c1a82631d097d"
   },
   {
     "url": "assets/css/0.styles.7651ae03.css",
@@ -40,8 +40,8 @@ self.__precacheManifest = [
     "revision": "e9c3a79e2804b2ecfad7d49dc7ba132c"
   },
   {
-    "url": "assets/js/3.da935f28.js",
-    "revision": "a280326c8a1cd51db3ebcc8cece1f812"
+    "url": "assets/js/3.d9d99e57.js",
+    "revision": "f3fc0f0d2312ae1ba1505d0f1e7b5510"
   },
   {
     "url": "assets/js/4.1b3f20b5.js",
@@ -56,8 +56,8 @@ self.__precacheManifest = [
     "revision": "75f878b83eeb777bf5f6a09b51490f50"
   },
   {
-    "url": "assets/js/7.ab81161d.js",
-    "revision": "f458eb709270b83649059f51beac5c7b"
+    "url": "assets/js/7.429eb56f.js",
+    "revision": "14703f09daa53165145438c8ab6a8722"
   },
   {
     "url": "assets/js/8.96304e23.js",
@@ -68,28 +68,28 @@ self.__precacheManifest = [
     "revision": "09d631c2ab1084167a11f251ba0c2253"
   },
   {
-    "url": "assets/js/app.dfffa541.js",
-    "revision": "a3753287e4d0c53b0984682e662aba75"
+    "url": "assets/js/app.8966ef50.js",
+    "revision": "21d0646d8e44d0c070e10b1381eeaf58"
   },
   {
     "url": "guide/index.html",
-    "revision": "ee2d56e930a12f4fa067b90ad4e4ae9d"
+    "revision": "5cef4345308ef26dbc9f395bd94f3d3e"
   },
   {
     "url": "guide/mform.html",
-    "revision": "ae07f36ad869a51d55907d059c8b055e"
+    "revision": "6c91e8edf971b1a7bade6e37e5ee69df"
   },
   {
     "url": "guide/mselect.html",
-    "revision": "abd93b8b9e03d87c86179c08f2e98b90"
+    "revision": "4758542263e70dea52f3a0f48406dc84"
   },
   {
     "url": "guide/mtable.html",
-    "revision": "2f31e8136a793b76bcc132a441fe1e0a"
+    "revision": "4fea0fe00f30640eb8faf3dd7b2da397"
   },
   {
     "url": "index.html",
-    "revision": "bcd5238c83ac5871787a354e541c3cfd"
+    "revision": "9d39ecd1d73db55c12eeaad16f1173d5"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();

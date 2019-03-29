@@ -7,7 +7,7 @@ module.exports = {
   serviceWorker: true,
   dest:path.resolve(__dirname,'../../docs/'),
   themeConfig: {
-    repo: 'hyk51594176/mComponent',
+    repo: 'hyk51594176/mcommon',
     docsDir: 'docs',
     nav:[
       {
