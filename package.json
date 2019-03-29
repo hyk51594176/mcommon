@@ -7,8 +7,8 @@
     "build": "rollup -c",
     "release": "npm run build && npm run pub",
     "pub": "npm publish --access public",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:dev": "vuepress dev vuepressdocs",
+    "docs:build": "vuepress build vuepressdocs"
   },
   "author": "51594176@qq.com",
   "license": "MIT",
