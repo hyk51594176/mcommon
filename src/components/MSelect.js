@@ -28,7 +28,8 @@ export default {
     dataList: Array,
     multiple: Boolean,
     showMsg: Boolean,
-    getList: Function
+    getList: Function,
+    customRender: Function
   },
   // inheritAttrs: false,
   data () {
@@ -156,7 +157,7 @@ export default {
 
   },
   render (h) {
-    const { list, valueKey, multiple, loading, currentValue, remoteMethod, $attrs, $listeners } = this
+    const { list, valueKey, multiple, loading, currentValue, remoteMethod, $attrs, $listeners,customRender } = this
     let listeners = {
       ...$listeners,
       clear: remoteMethod,
@@ -192,7 +193,7 @@ export default {
           disabled: item.disabled
         },
         key: item[valueKey.value]
-      })
+      },[customRender ? customRender.call(null,h,item) : null])
     })])
   }
 }
