@@ -63,6 +63,14 @@ mergeColumn|可合并行字段|Array|-
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo5.vue
 </demo-block>
 
+
+## 导出excel
+<demo-block>
+<example-mtable-demo6 slot="source"/>
+ <<< @/vuepressdocs/.vuepress/components/example/mtable/demo6.vue
+</demo-block>
+
+
  
 
  

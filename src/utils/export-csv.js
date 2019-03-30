@@ -86,42 +86,17 @@ const csv = {
       document.body.removeChild(link)
     }
   },
-  format (columns, datas, { noHeader = false, ...options }) {
+  format (columns, datas, options) {
     options = Object.assign({}, defaults, options)
-    let columnOrder
     const content = []
-    const column = []
-
-    if (columns) {
-      columnOrder = columns.map(v => {
-        if (typeof v === 'string') return v
-        if (!noHeader) {
-          column.push(typeof v.label !== 'undefined' ? v.label : v.key)
-        }
-        return v.key
-      })
-      if (column.length > 0) appendLine(content, column, options)
-    } else {
-      columnOrder = []
-      datas.forEach(v => {
-        if (!Array.isArray(v)) {
-          columnOrder = columnOrder.concat(Object.keys(v))
-        }
-      })
-      if (columnOrder.length > 0) {
-        columnOrder = columnOrder.filter((value, index, self) => self.indexOf(value) === index)
-        if (!noHeader) appendLine(content, columnOrder, options)
+    const column = columns.map(v => v.label)
+    appendLine(content, column, options)
+    datas.forEach(row => {
+      if (!Array.isArray(row)) {
+        row = columns.map(obj => (typeof row[obj.prop] !== 'undefined' ? row[obj.prop] : ''))
       }
-    }
-
-    if (Array.isArray(datas)) {
-      datas.forEach(row => {
-        if (!Array.isArray(row)) {
-          row = columnOrder.map(k => (typeof row[k] !== 'undefined' ? row[k] : ''))
-        }
-        appendLine(content, row, options)
-      })
-    }
+      appendLine(content, row, options)
+    })
     return content.join(newLine)
   }
 }
