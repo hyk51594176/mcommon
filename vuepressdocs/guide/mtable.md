@@ -57,7 +57,7 @@ mergeColumn|可合并行字段|Array|-
 </demo-block>
 
 ## 编辑表格
-
+通过getColumn合并当前column对象来渲染组件
 <demo-block>
 <example-mtable-demo5 slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo5.vue

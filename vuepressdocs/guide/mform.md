@@ -30,7 +30,10 @@ columns|form的每个组件配置|Array|-
     },
     rules:{ // el-form-item 的验证
 
-    }
+    },
+    getColumn(obj){
+
+    },//返回colum 来进行合并 
     ... //其他 可选props 包括 要渲染组件的props, el-form-item 对应的props,el-col对应props，都可以定义在当前对象中 
   }
 ]
