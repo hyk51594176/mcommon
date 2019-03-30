@@ -7,7 +7,7 @@
     <meta name="description" content="基于element-ui form、table二次封装，支持原table和form的所有功能。">
     
     
-    <link rel="preload" href="/mcommon/assets/css/0.styles.eaca620e.css" as="style"><link rel="preload" href="/mcommon/assets/js/app.9a50776a.js" as="script"><link rel="preload" href="/mcommon/assets/js/15.6092fb6b.js" as="script"><link rel="preload" href="/mcommon/assets/js/5.a4be80dd.js" as="script"><link rel="preload" href="/mcommon/assets/js/7.5dda2bab.js" as="script"><link rel="preload" href="/mcommon/assets/js/4.15c995fe.js" as="script"><link rel="preload" href="/mcommon/assets/js/8.99d8c4ca.js" as="script"><link rel="preload" href="/mcommon/assets/js/9.d4937275.js" as="script"><link rel="preload" href="/mcommon/assets/js/10.99040cd7.js" as="script"><link rel="prefetch" href="/mcommon/assets/js/11.8d800f03.js"><link rel="prefetch" href="/mcommon/assets/js/12.b2574c61.js"><link rel="prefetch" href="/mcommon/assets/js/13.34558a31.js"><link rel="prefetch" href="/mcommon/assets/js/14.7da57278.js"><link rel="prefetch" href="/mcommon/assets/js/16.f98d2340.js"><link rel="prefetch" href="/mcommon/assets/js/2.9f0763c6.js"><link rel="prefetch" href="/mcommon/assets/js/3.865f3608.js"><link rel="prefetch" href="/mcommon/assets/js/6.1b58a567.js">
+    <link rel="preload" href="/mcommon/assets/css/0.styles.eaca620e.css" as="style"><link rel="preload" href="/mcommon/assets/js/app.b0c03be3.js" as="script"><link rel="preload" href="/mcommon/assets/js/15.2946bcfc.js" as="script"><link rel="preload" href="/mcommon/assets/js/5.a4be80dd.js" as="script"><link rel="preload" href="/mcommon/assets/js/7.5dda2bab.js" as="script"><link rel="preload" href="/mcommon/assets/js/4.15c995fe.js" as="script"><link rel="preload" href="/mcommon/assets/js/8.99d8c4ca.js" as="script"><link rel="preload" href="/mcommon/assets/js/9.d4937275.js" as="script"><link rel="preload" href="/mcommon/assets/js/10.99040cd7.js" as="script"><link rel="prefetch" href="/mcommon/assets/js/11.8d800f03.js"><link rel="prefetch" href="/mcommon/assets/js/12.b2574c61.js"><link rel="prefetch" href="/mcommon/assets/js/13.195d93a1.js"><link rel="prefetch" href="/mcommon/assets/js/14.7da57278.js"><link rel="prefetch" href="/mcommon/assets/js/16.f98d2340.js"><link rel="prefetch" href="/mcommon/assets/js/2.9f0763c6.js"><link rel="prefetch" href="/mcommon/assets/js/3.865f3608.js"><link rel="prefetch" href="/mcommon/assets/js/6.1b58a567.js">
     <link rel="stylesheet" href="/mcommon/assets/css/0.styles.eaca620e.css">
   </head>
   <body>
@@ -319,115 +319,14 @@
 <span class="token punctuation">}</span>
 </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
 
-</code></pre></div></div> <div class="highlight"></div></div> <div class="demo-block-control"><i class="el-icon-caret-bottom"></i> <span style="display:none;">显示代码</span></div></div> <h2 id="编辑表格"><a href="#编辑表格" aria-hidden="true" class="header-anchor">#</a> 编辑表格</h2> <div class="demo-block demo-guide demo-mtable.html"><div class="source"></div> <div class="meta"><div class="description"><div><div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition el-table--small"><div class="hidden-columns"><div></div><div></div><div></div><div></div><div></div><div></div></div><div class="el-table__header-wrapper"><table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width:;"><colgroup></colgroup><thead><tr></tr></thead></table></div><div class="el-table__body-wrapper is-scrolling-none"><table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width:;"><colgroup></colgroup><tbody><tr class="el-table__row"></tr><tr class="el-table__row"></tr><tr class="el-table__row"></tr><tr class="el-table__row"></tr><tr class="el-table__row"></tr><!----></tbody></table><!----><!----></div><!----><!----><!----><!----><div class="el-table__column-resize-proxy" style="display:none;"></div></div></div> <div class="language-vue extra-class"><pre class="language-vue"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>m-table</span> <span class="token attr-name">:tableData</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">'</span>tableData<span class="token punctuation">'</span></span> <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">'</span>columns<span class="token punctuation">'</span></span> <span class="token attr-name">:showPage</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">'</span>false<span class="token punctuation">'</span></span> <span class="token attr-name">:showNum</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">'</span>false<span class="token punctuation">'</span></span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span> <span class="token attr-name">slot</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>btn<span class="token punctuation">&quot;</span></span> <span class="token attr-name">slot-scope</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>scope<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>el-button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>text<span class="token punctuation">&quot;</span></span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">'</span>!scope.row.edit<span class="token punctuation">'</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>edit(scope.row)<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>编辑<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>el-button</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>el-button</span> <span class="token attr-name">v-else</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>text<span class="token punctuation">&quot;</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>save(scope.row)<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>保存<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>el-button</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>el-button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>text<span class="token punctuation">&quot;</span></span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">'</span>scope.row.edit<span class="token punctuation">'</span></span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>cancel(scope.row)<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>取消<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>el-button</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>m-table</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
-  <span class="token function">data</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> <span class="token punctuation">{</span>
-       columns<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-          <span class="token punctuation">{</span>
-            prop<span class="token punctuation">:</span> <span class="token string">'id'</span><span class="token punctuation">,</span>
-            label<span class="token punctuation">:</span> <span class="token string">'ID'</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            prop<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
-            label<span class="token punctuation">:</span> <span class="token string">'姓名'</span><span class="token punctuation">,</span>
-            <span class="token function-variable function">getColumn</span><span class="token punctuation">:</span><span class="token parameter">row</span><span class="token operator">=&gt;</span><span class="token punctuation">(</span><span class="token punctuation">{</span>el<span class="token punctuation">:</span>row<span class="token punctuation">.</span>edit<span class="token operator">?</span><span class="token string">'input'</span><span class="token punctuation">:</span><span class="token keyword">null</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            prop<span class="token punctuation">:</span> <span class="token string">'amount1'</span><span class="token punctuation">,</span>
-            label<span class="token punctuation">:</span> <span class="token string">'数值1'</span><span class="token punctuation">,</span>
-            sortable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            prop<span class="token punctuation">:</span> <span class="token string">'amount2'</span><span class="token punctuation">,</span>
-            label<span class="token punctuation">:</span> <span class="token string">'数值2'</span><span class="token punctuation">,</span>
-            sortable<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-            <span class="token function-variable function">getColumn</span><span class="token punctuation">:</span><span class="token parameter">row</span><span class="token operator">=&gt;</span><span class="token punctuation">(</span><span class="token punctuation">{</span>el<span class="token punctuation">:</span>row<span class="token punctuation">.</span>edit<span class="token operator">?</span><span class="token string">'input'</span><span class="token punctuation">:</span><span class="token keyword">null</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            prop<span class="token punctuation">:</span> <span class="token string">'amount3'</span><span class="token punctuation">,</span>
-            label<span class="token punctuation">:</span> <span class="token string">'数值3'</span><span class="token punctuation">,</span>
-            sortable<span class="token punctuation">:</span> <span class="token boolean">true</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token punctuation">{</span>
-            label<span class="token punctuation">:</span><span class="token string">'操作'</span><span class="token punctuation">,</span>
-            prop<span class="token punctuation">:</span><span class="token string">'btn'</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">]</span><span class="token punctuation">,</span>
-        tableData<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-          <span class="token punctuation">{</span>
-            id<span class="token punctuation">:</span> <span class="token string">'12987122'</span><span class="token punctuation">,</span>
-            name<span class="token punctuation">:</span> <span class="token string">'王小虎'</span><span class="token punctuation">,</span>
-            amount1<span class="token punctuation">:</span> <span class="token string">'234'</span><span class="token punctuation">,</span>
-            amount2<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span>
-            edit<span class="token punctuation">:</span><span class="token boolean">false</span><span class="token punctuation">,</span>
-            amount3<span class="token punctuation">:</span> <span class="token number">10</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            id<span class="token punctuation">:</span> <span class="token string">'12987123'</span><span class="token punctuation">,</span>
-            name<span class="token punctuation">:</span> <span class="token string">'王小虎'</span><span class="token punctuation">,</span>
-            amount1<span class="token punctuation">:</span> <span class="token string">'165'</span><span class="token punctuation">,</span>
-            amount2<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span>
-            edit<span class="token punctuation">:</span><span class="token boolean">false</span><span class="token punctuation">,</span>
-            amount3<span class="token punctuation">:</span> <span class="token number">12</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            id<span class="token punctuation">:</span> <span class="token string">'12987124'</span><span class="token punctuation">,</span>
-            name<span class="token punctuation">:</span> <span class="token string">'王小虎'</span><span class="token punctuation">,</span>
-            amount2<span class="token punctuation">:</span> <span class="token string">'3'</span><span class="token punctuation">,</span>
-            amount1<span class="token punctuation">:</span> <span class="token string">'324'</span><span class="token punctuation">,</span>
-            edit<span class="token punctuation">:</span><span class="token boolean">false</span><span class="token punctuation">,</span>
-            amount3<span class="token punctuation">:</span> <span class="token number">9</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            id<span class="token punctuation">:</span> <span class="token string">'12987125'</span><span class="token punctuation">,</span>
-            name<span class="token punctuation">:</span> <span class="token string">'王小虎'</span><span class="token punctuation">,</span>
-            amount1<span class="token punctuation">:</span> <span class="token string">'621'</span><span class="token punctuation">,</span>
-            amount2<span class="token punctuation">:</span> <span class="token string">'2'</span><span class="token punctuation">,</span>
-            edit<span class="token punctuation">:</span><span class="token boolean">false</span><span class="token punctuation">,</span>
-            amount3<span class="token punctuation">:</span> <span class="token number">17</span>
-          <span class="token punctuation">}</span><span class="token punctuation">,</span>
-          <span class="token punctuation">{</span>
-            id<span class="token punctuation">:</span> <span class="token string">'12987126'</span><span class="token punctuation">,</span>
-            name<span class="token punctuation">:</span> <span class="token string">'王小虎'</span><span class="token punctuation">,</span>
-            amount1<span class="token punctuation">:</span> <span class="token string">'539'</span><span class="token punctuation">,</span>
-            amount2<span class="token punctuation">:</span> <span class="token string">'4'</span><span class="token punctuation">,</span>
-            edit<span class="token punctuation">:</span><span class="token boolean">false</span><span class="token punctuation">,</span>
-            amount3<span class="token punctuation">:</span> <span class="token number">15</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">]</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  methods<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    <span class="token function">edit</span><span class="token punctuation">(</span><span class="token parameter">row</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      row<span class="token punctuation">.</span>edit <span class="token operator">=</span> <span class="token boolean">true</span>
-      row<span class="token punctuation">.</span>_copyObj <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>row<span class="token punctuation">)</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token function">save</span><span class="token punctuation">(</span><span class="token parameter">row</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      row<span class="token punctuation">.</span>edit <span class="token operator">=</span> <span class="token boolean">false</span>
-      <span class="token keyword">delete</span> row<span class="token punctuation">.</span>_copyObj
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token function">cancel</span><span class="token punctuation">(</span><span class="token parameter">row</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-      Object<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span>row<span class="token punctuation">,</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>row<span class="token punctuation">.</span>_copyObj<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">{</span>edit<span class="token punctuation">:</span><span class="token boolean">false</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-      <span class="token keyword">delete</span> obj<span class="token punctuation">.</span>_copyObj
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
-
-</code></pre></div></div> <div class="highlight"></div></div> <div class="demo-block-control"><i class="el-icon-caret-bottom"></i> <span style="display:none;">显示代码</span></div></div></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+</code></pre></div></div> <div class="highlight"></div></div> <div class="demo-block-control"><i class="el-icon-caret-bottom"></i> <span style="display:none;">显示代码</span></div></div> <h2 id="编辑表格"><a href="#编辑表格" aria-hidden="true" class="header-anchor">#</a> 编辑表格</h2> <p>通过getColumn合并当前column对象来渲染组件
+<div class="demo-block demo-guide demo-mtable.html"><div class="source"></div> <div class="meta"><div class="description"><div><div class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition el-table--small"><div class="hidden-columns"><div></div><div></div><div></div><div></div><div></div><div></div></div><div class="el-table__header-wrapper"><table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width:;"><colgroup></colgroup><thead><tr></tr></thead></table></div><div class="el-table__body-wrapper is-scrolling-none"><table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="width:;"><colgroup></colgroup><tbody><tr class="el-table__row"></tr><tr class="el-table__row"></tr><tr class="el-table__row"></tr><tr class="el-table__row"></tr><tr class="el-table__row"></tr><!----></tbody></table><!----><!----></div><!----><!----><!----><!----><div class="el-table__column-resize-proxy" style="display:none;"></div></div></div>
+&lt;&lt;&lt; @/vuepressdocs/.vuepress/components/example/mtable/demo5.vue
+</div> <div class="highlight"></div></div> <div class="demo-block-control"><i class="el-icon-caret-bottom"></i> <span style="display:none;">显示代码</span></div></div></p></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
         ←
         <a href="/mcommon/guide/mform.html" class="prev">
           MForm
         </a></span> <!----></p></div> </div> <!----></div></div>
-    <script src="/mcommon/assets/js/app.9a50776a.js" defer></script><script src="/mcommon/assets/js/15.6092fb6b.js" defer></script><script src="/mcommon/assets/js/5.a4be80dd.js" defer></script><script src="/mcommon/assets/js/7.5dda2bab.js" defer></script><script src="/mcommon/assets/js/4.15c995fe.js" defer></script><script src="/mcommon/assets/js/8.99d8c4ca.js" defer></script><script src="/mcommon/assets/js/9.d4937275.js" defer></script><script src="/mcommon/assets/js/10.99040cd7.js" defer></script>
+    <script src="/mcommon/assets/js/app.b0c03be3.js" defer></script><script src="/mcommon/assets/js/15.2946bcfc.js" defer></script><script src="/mcommon/assets/js/5.a4be80dd.js" defer></script><script src="/mcommon/assets/js/7.5dda2bab.js" defer></script><script src="/mcommon/assets/js/4.15c995fe.js" defer></script><script src="/mcommon/assets/js/8.99d8c4ca.js" defer></script><script src="/mcommon/assets/js/9.d4937275.js" defer></script><script src="/mcommon/assets/js/10.99040cd7.js" defer></script>
   </body>
 </html>
