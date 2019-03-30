@@ -22,18 +22,21 @@ mergeColumn|可合并行字段|Array|-
 ##  基础用法
 自定义列可以通过 render方法 jsx语法。或者slot-scope 来自定义列
 树形结构数据的支持需要elemen-ui >=2.7
+
 <demo-block>
 <example-mtable-demo slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo.vue
 </demo-block>
 
 ## 多级表头、排序、多选
+
 <demo-block>
 <example-mtable-demo1 slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo1.vue
 </demo-block>
 
 ## 展开行
+
 <demo-block>
 <example-mtable-demo2 slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo2.vue
@@ -42,6 +45,7 @@ mergeColumn|可合并行字段|Array|-
 
 ## 合计行
 自动合计只需在需要合并的列sSummary为true,unit 为单位,如果想要手动合并summaryMethod
+
 <demo-block>
 <example-mtable-demo3 slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo3.vue
@@ -58,6 +62,7 @@ mergeColumn|可合并行字段|Array|-
 
 ## 编辑表格
 通过getColumn合并当前column对象来渲染组件
+
 <demo-block>
 <example-mtable-demo5 slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo5.vue
@@ -65,6 +70,7 @@ mergeColumn|可合并行字段|Array|-
 
 
 ## 导出excel
+
 <demo-block>
 <example-mtable-demo6 slot="source"/>
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo6.vue
