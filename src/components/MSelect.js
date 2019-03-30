@@ -193,7 +193,7 @@ export default {
           disabled: item.disabled
         },
         key: item[valueKey.value]
-      }, [customRender ? customRender.call(null, h, item) : null])
+      }, [customRender ? customRender(h, item) : null])
     })])
   }
 }
