@@ -157,7 +157,7 @@ export default {
 
   },
   render (h) {
-    const { list, valueKey, multiple, loading, currentValue, remoteMethod, $attrs, $listeners,customRender } = this
+    const { list, valueKey, multiple, loading, currentValue, remoteMethod, $attrs, $listeners, customRender } = this
     let listeners = {
       ...$listeners,
       clear: remoteMethod,
@@ -193,7 +193,7 @@ export default {
           disabled: item.disabled
         },
         key: item[valueKey.value]
-      },[customRender ? customRender.call(null,h,item) : null])
+      }, [customRender ? customRender.call(null, h, item) : null])
     })])
   }
 }

@@ -1,46 +1,11 @@
 import ExportCsv from '../utils/export-csv'
 import createTag from './createTag'
 const createDefault = function (h, { scope, column, index }) {
-  const { isTree, expandClick, getColumns } = this
-  const children = []
-  if (scope.row.treeLevel && index === 0) {
-    children.push(
-      h('span', {
-        style: {
-          minWidth: `${scope.row.treeLevel * 15}px`
-        }
-      })
-    )
-  }
-  if (scope.row.expandAll !== undefined && index === 0) {
-    children.push(
-      h('span', null, [h('i', {
-        class: {
-          'el-icon-minus': scope.row.expandAll,
-          'el-icon-plus': !scope.row.expandAll
-        },
-        style: {
-          cursor: 'pointer',
-          fontWeight: 900,
-          fontSize: '13px',
-          marginRight: '10px'
-        },
-        on: {
-          click: expandClick.bind(null, scope)
-        }
-      })])
-    )
-  }
-  children.push(createTag.call(this, h, {
-    column: getColumns(column, scope),
+  return h('span', null, [createTag.call(this, h, {
+    column: this.getColumns(column, scope),
     row: scope.row,
     $index: scope.$index
-  }))
-  return h('span', {
-    style: {
-      display: isTree && index === 0 ? 'flex' : null
-    }
-  }, children)
+  })])
 }
 
 const createTableColumn = function (h, columns) {
@@ -65,18 +30,18 @@ const createTableColumn = function (h, columns) {
 const createTable = function (h) {
   const {
     list, stripe,
-    border, summarymethod,
+    border, summaryMethod,
     summaryDefault, isShowSummary,
     $listeners,
     $attrs,
     expand,
-    isTree,
     selection,
     selectable,
     showNum,
     reserveSelection,
     numTitle,
     numFiexd,
+    numWidth,
     page,
     columns,
     buttonWidth,
@@ -89,7 +54,7 @@ const createTable = function (h) {
     spanMethod
   } = this
   const children = []
-  if (expand && !isTree) {
+  if (expand) {
     children.push(h('el-table-column', {
       props: {
         type: 'expand'
@@ -110,19 +75,19 @@ const createTable = function (h) {
       })
     )
   }
-  if (showNum && list.length && !isTree) {
+  if (showNum && list.length) {
     const getNum = scope => scope.$index + 1 + ((page.pageNum - 1) * page.pageSize)
     children.push(
       h('el-table-column', {
         props: {
           label: numTitle,
           align: 'center',
-          width: 60,
+          width: numWidth || 60,
           reserveSelection,
           fixed: numFiexd || (columns[0] && columns[0].fixed)
         },
         scopedSlots: {
-          default: this.$scopedSlots.mnum ? props => this.$scopedSlots.mnum({ ...props, num: getNum(props) }) : props => getNum(props)
+          default: this.$scopedSlots.num ? props => this.$scopedSlots.mnum({ ...props, num: getNum(props) }) : props => getNum(props)
         }
       })
     )
@@ -148,7 +113,7 @@ const createTable = function (h) {
       data: list,
       border,
       stripe,
-      summarymethod: summarymethod || summaryDefault,
+      summaryMethod: summaryMethod || summaryDefault,
       showSummary: isShowSummary,
       spanMethod: (mergeRow.length || mergeColumn.length) ? arraySpanMethod : spanMethod,
       ...$attrs
@@ -159,11 +124,11 @@ const createTable = function (h) {
 }
 
 const createpagPination = function (h) {
-  const { showPage, isTree, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
+  const { showPage, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
   if (this.$scopedSlots.page) {
     return this.$scopedSlots.page()
   }
-  if (showPage && !isTree) {
+  if (showPage && cTotal > page.pageSize) {
     return h('el-pagination', {
       props: {
         currentPage: page.pageNum,
@@ -192,8 +157,8 @@ export default {
         return []
       }
     },
-    isTree: Boolean,
     buttonWidth: [String, Number],
+    numWidth: [String, Number],
     buttonAlign: {
       type: String,
       default: 'center'
@@ -228,7 +193,7 @@ export default {
       type: Boolean,
       default: false
     },
-    summarymethod: {
+    summaryMethod: {
       type: Function
     },
     border: {
@@ -279,24 +244,23 @@ export default {
       type: Array,
       default: () => []
     },
-    spanMethod: Function
-  },
-  inheritAttrs: false,
-  data () {
-    return {
-      treeData: this.isTree ? this.formatTreeData(this.tableData) : []
+    spanMethod: Function,
+    sumText: {
+      type: String,
+      default: '合计'
     }
   },
+  inheritAttrs: false,
+
   computed: {
     cTotal () {
-      const t = this.total || (this.page && this.page.total)
+      const t = this.total || this.page.total
       if (t) return t
-      return this.isTree ? this.treeData.length : this.tableData.length
+      return this.tableData.length
     },
     list () {
-      if (this.isTree) return this.treeData
-      const t = this.total || (this.page && this.page.total)
-      if (this.showPage || !t) {
+      const t = this.total || this.page.total
+      if ((this.showPage && t === this.tableData.length) || !this.showPage) {
         return this.tableData
       }
       return this.tableData.filter((obj, index) => {
@@ -338,30 +302,9 @@ export default {
     tableData () {
       const count = this.total || this.page.total
       if (!count && isNaN(count)) this.page.pageNum = 1
-      if (this.isTree) this.treeData = this.formatTreeData(this.tableData)
     }
   },
   methods: {
-    formatTreeData (data, level = 0, arr = []) {
-      data.forEach(obj => {
-        obj.treeLevel = level
-        arr.push(obj)
-        if (obj.children && obj.children.length) {
-          const key = this.$attrs.rowKey || this.$attrs['row-key']
-          if (this.treeData && this.treeData.length && key) {
-            const o = this.treeData.find(item => item[key] === obj[key]) || { expandAll: false }
-            obj.expandAll = o.expandAll
-          }
-          if (obj.expandAll === undefined)obj.expandAll = false
-          if (obj.expandAll === true) this.formatTreeData(obj.children, level + 1, arr)
-        }
-      })
-      return arr
-    },
-    expandClick (scope) {
-      scope.row.expandAll = !scope.row.expandAll
-      this.treeData = this.formatTreeData(this.tableData)
-    },
     toggleRowExpansion (...args) {
       this.$refs.commontable.toggleRowExpansion(...args)
     },
@@ -413,7 +356,7 @@ export default {
       const sums = []
       columns.forEach((column, index) => {
         if (index === 0) {
-          sums[index] = '合计'
+          sums[index] = this.sumText
           return
         } else {
           if (this.summaryProps.indexOf(column.property) < 0) return
@@ -430,14 +373,16 @@ export default {
           }, 0)
         }
         sums[index] = parseFloat(sums[index] || 0).toFixed(2)
-        if (column.className === 'currency' && sums[index]) {
-          sums[index] = (sums[index] + '').replace(
-            /\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,
-            '$&,'
-          )
-        }
-        if (column.className === 'Percentage' && sums[index]) {
-          sums[index] = sums[index] + '%'
+        let prop = column.property
+        let obj = prop ? this.columns.find(obj => obj.prop === prop) : null
+        if (obj && sums[index]) {
+          if (obj.isCurrency) {
+            sums[index] = (sums[index] + '').replace(
+              /\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,
+              '$&,'
+            )
+          }
+          if (obj.unit)sums[index] = sums[index] + obj.unit
         }
       })
       return sums

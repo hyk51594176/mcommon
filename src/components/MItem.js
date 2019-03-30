@@ -59,13 +59,20 @@ const pickerOptions = {
 const createChildren = (h, el, column, valueKey) => {
   const list = column.dataList || column.list || []
   return list.map(item => {
+    let children
+    if (column.slots && column.slots.default) {
+      children = [column.slots.default.call(null, h, item)]
+    } else {
+      children = item[valueKey.label]
+    }
+
     return h(el, {
       props: {
         ...column,
         label: column.props ? item[column.props.value] : item[valueKey.value]
       },
       key: item[valueKey.label]
-    }, column.props ? item[column.props.label] : item[valueKey.label])
+    }, children)
   })
 }
 
@@ -95,8 +102,14 @@ export default {
     }
   },
   computed: {
+    computedColumn () {
+      return {
+        ...this.column,
+        ...((this.column.getColumn && this.column.getColumn(this.row)) || {})
+      }
+    },
     componentType () {
-      const { el } = this.column
+      const { el } = this.computedColumn
       if (!el) return null
       if (el === 'mSelect' || el === 'MSelect' || el === 'select' || el === 'el-select') {
         return 'm-select'
@@ -105,7 +118,7 @@ export default {
       }
     },
     valueKey () {
-      if (this.column.valueKey) return this.column.valueKey
+      if (this.computedColumn.valueKey) return this.computedColumn.valueKey
       return {
         label: 'label',
         value: 'value'
@@ -125,22 +138,22 @@ export default {
         return val
       },
       set (value) {
-        if (this.column.rules) {
+        if (this.computedColumn.rules) {
           let isNumber = false
-          if (Array.isArray(this.column.rules)) {
-            isNumber = this.column.rules.some(obj => obj.type === 'number')
+          if (Array.isArray(this.computedColumn.rules)) {
+            isNumber = this.computedColumn.rules.some(obj => obj.type === 'number')
           } else {
-            isNumber = this.column.rules.type === 'number'
+            isNumber = this.computedColumn.rules.type === 'number'
           }
           if (isNumber && !isNaN(value) && this.componentType === 'el-input') value = Number(value)
         }
-        if (this.column.type === 'currency') {
+        if (this.computedColumn.type === 'currency') {
           isNaN(value) ? (value = 0) : (value = Number(value))
         }
         try {
-          if (this.getStrFunction(`this.row.${this.column.prop}`) === undefined) {
+          if (this.getStrFunction(`this.row.${this.computedColumn.prop}`) === undefined) {
             this.setRowKey(value)
-          } else this.getStrFunction(`this.row.${this.column.prop} = value`)
+          } else this.getStrFunction(`this.row.${this.computedColumn.prop} = value`)
         } catch (error) {
           this.setRowKey(value)
         }
@@ -154,8 +167,8 @@ export default {
       return new Fn(`return ${str}`).call(this)
     },
     setRowKey (value) {
-      if (this.column.prop && this.row) {
-        let path = this.column.prop.replace(/\[(\w+)\]/g, '.$1').replace(/^\./, '')
+      if (this.computedColumn.prop && this.row) {
+        let path = this.computedColumn.prop.replace(/\[(\w+)\]/g, '.$1').replace(/^\./, '')
         let arr = path.split('.')
         let firstKey = arr.shift()
         let lastIndex = arr.length - 1
@@ -177,13 +190,13 @@ export default {
     },
     getParams () {
       let newObj = {}
-      if (this.column.params && typeof this.column.params === 'object') {
-        for (let key in this.column.params) {
+      if (this.computedColumn.params && typeof this.computedColumn.params === 'object') {
+        for (let key in this.computedColumn.params) {
           let value
           try {
-            value = this.getStrFunction(`this.row.${this.column.params[key]}`)
+            value = this.getStrFunction(`this.row.${this.computedColumn.params[key]}`)
           } catch (err) { }
-          newObj[key] = value !== undefined ? value : this.column.params[key]
+          newObj[key] = value !== undefined ? value : this.computedColumn.params[key]
         }
       }
       return newObj
@@ -217,54 +230,59 @@ export default {
     }
   },
   render (h) {
-    const { row, $index, column, modelComputed, componentType, valueKey, getParams } = this
+    const { row, $index, computedColumn, modelComputed, componentType, valueKey, getParams } = this
     if (componentType) {
-      const placeholder = column.placeholder !== undefined
-        ? column.placeholder : column.label
+      const placeholder = computedColumn.placeholder !== undefined
+        ? computedColumn.placeholder : computedColumn.label
       let listeners = {
-        ...(column.listeners || {}),
+        ...(computedColumn.listeners || {}),
         input: (val) => {
           this.modelComputed = val
-          column.listeners && column.listeners.input && column.listeners.input(val)
+          computedColumn.listeners && computedColumn.listeners.input && computedColumn.listeners.input(val)
         }
       }
-      if (column.listeners && column.listeners.currentObj) {
-        listeners.currentObj = data => column.listeners.currentObj(data, row, $index)
+      if (computedColumn.listeners && computedColumn.listeners.currentObj) {
+        listeners.currentObj = data => computedColumn.listeners.currentObj(data, row, $index)
       }
       let arr = ['m-select', 'el-checkbox-group', 'el-radio-group']
       if (arr.includes(componentType)) {
+        let str = ''
+        if (computedColumn.type === 'button') {
+          str = '-button'
+        }
         let children = componentType !== 'm-select'
           ? createChildren(
             h,
-            componentType === 'el-checkbox-group' ? 'el-checkbox' : 'el-radio',
-            column,
+            componentType === 'el-checkbox-group' ? `el-checkbox${str}` : `el-radio${str}`,
+            computedColumn,
             valueKey
           ) : null
         return h(componentType, {
           props: {
-            ...column,
+            ...computedColumn,
             placeholder,
-            params: componentType === 'm-select' ? getParams(column) : null,
-            value: modelComputed
+            params: componentType === 'm-select' ? getParams(computedColumn) : null,
+            value: modelComputed,
+            customRender: (computedColumn.slots && computedColumn.slots.default) ? computedColumn.slots.default : null
           },
-          attrs: column,
+          attrs: computedColumn,
           on: listeners
         }, children)
       } else {
-        if (componentType === 'el-input' && column.type === 'currency') {
+        if (componentType === 'el-input' && computedColumn.type === 'currency') {
           listeners.blur = (...args) => {
             this.isForce = false
-            column.listeners && column.listeners.blur && column.listeners.blur(...args)
+            computedColumn.listeners && computedColumn.listeners.blur && computedColumn.listeners.blur(...args)
           }
           listeners.focus = (...args) => {
             this.isForce = true
-            column.listeners && column.listeners.focus && column.listeners.focus(...args)
+            computedColumn.listeners && computedColumn.listeners.focus && computedColumn.listeners.focus(...args)
           }
         }
-        let slots = column.slots || {}
+        let slots = computedColumn.slots || {}
         let children = Object.keys(slots).map(key => {
           if (typeof slots[key] !== 'function') throw new Error(`slots ${key} 必须为函数返回VNode`)
-          let VNode = slots[key](h, { row, column, $index })
+          let VNode = slots[key](h, { row, computedColumn, $index })
           VNode.data = {
             ...(VNode.data || {}),
             slot: key
@@ -274,10 +292,10 @@ export default {
 
         return h(componentType, {
           props: {
-            ...column,
+            ...computedColumn,
             filterable: true,
             value: modelComputed,
-            label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : column.label
+            label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : computedColumn.label
           },
           attrs: {
             placeholder
@@ -286,12 +304,12 @@ export default {
         }, children)
       }
     } else {
-      const VNode = typeof column.render === 'function' ? column.render(h, { row, column, $index }) : column.render
+      const VNode = typeof computedColumn.render === 'function' ? computedColumn.render(h, { row, computedColumn, $index }) : computedColumn.render
       return VNode || h('span', {
         style: {
           'word-break': 'break-all'
         }
-      }, column.format ? column.format(row) : modelComputed)
+      }, computedColumn.format ? computedColumn.format(row) : modelComputed)
     }
   }
 }

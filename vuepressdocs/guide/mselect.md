@@ -13,6 +13,7 @@ dataList|下拉数据|array|[]
 getList|异步获取数据的方法,当dataList不为空时不执行该方法|promise|-
 filterable|是否可搜索|boolean| true
 clearable|是否可清楚|boolean| true
+customRender|自定义模版|Function|-
 ### Events
 事件名称|说明|回调参数  
 -|-|-
@@ -22,8 +23,8 @@ currentObj|当前选中或清除时回调| 当前选中的数据 object、null
 ## 用法
 
 <demo-block>
-<example-mselect-demo1 slot="source"/>
- <<< @/vuepressdocs/.vuepress/components/example/mselect/demo1.vue
+<example-mselect-demo slot="source"/>
+ <<< @/vuepressdocs/.vuepress/components/example/mselect/demo.vue
 </demo-block>
 
  
