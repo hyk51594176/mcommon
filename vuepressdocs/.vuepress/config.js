@@ -7,7 +7,7 @@ module.exports = {
   dest:path.resolve(__dirname,'../../docs/'),
   themeConfig: {
     repo: 'hyk51594176/mcommon',
-    docsDir: 'docs',
+    docsDir: 'vuepress',
     nav:[
       {
         text: '主页',

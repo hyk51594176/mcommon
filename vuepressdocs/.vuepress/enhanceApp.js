@@ -6,7 +6,7 @@ import MTable from '../../src/components/MTable'
 import DemoBlock from './components/demo-block';
 import 'element-ui/lib/theme-chalk/index.css'
 export default ({Vue}) => {
-  Vue.use(elementUI)
+  Vue.use(elementUI,{size:'small'})
   Vue.component(MForm.name, MForm)
   Vue.component(MItem.name, MItem)
   Vue.component(MSelect.name, MSelect)
