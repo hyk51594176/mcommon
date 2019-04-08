@@ -260,7 +260,7 @@ export default {
     },
     list () {
       const t = this.total || this.page.total
-      if ((this.showPage && t === this.tableData.length) || !this.showPage) {
+      if ((this.showPage && t !== this.tableData.length) || !this.showPage) {
         return this.tableData
       }
       return this.tableData.filter((obj, index) => {
