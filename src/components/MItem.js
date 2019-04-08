@@ -237,7 +237,11 @@ export default {
       let listeners = {
         ...(computedColumn.listeners || {}),
         input: (val) => {
-          this.modelComputed = val
+          if (componentType === 'el-input') {
+            this.modelComputed = val.trim()
+          } else {
+            this.modelComputed = val
+          }
           computedColumn.listeners && computedColumn.listeners.input && computedColumn.listeners.input(val)
         }
       }
@@ -281,8 +285,12 @@ export default {
         }
         let slots = computedColumn.slots || {}
         let children = Object.keys(slots).map(key => {
-          if (typeof slots[key] !== 'function') throw new Error(`slots ${key} 必须为函数返回VNode`)
-          let VNode = slots[key](h, { row, computedColumn, $index })
+          let VNode = null
+          if (typeof slots[key] === 'function') {
+            VNode = slots[key](h, { row, column: computedColumn, $index })
+          } else {
+            VNode = slots[key]
+          }
           VNode.data = {
             ...(VNode.data || {}),
             slot: key
