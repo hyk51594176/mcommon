@@ -95,8 +95,8 @@ export default {
     }
   },
   watch: {
-    row () {
-      if (this.$parent.clearValidate) {
+    row (ov, nv) {
+      if (this.$parent.clearValidate && ov !== nv) {
         this.$nextTick(this.$parent.clearValidate)
       }
     }
