@@ -124,7 +124,7 @@ const createTable = function (h) {
 }
 
 const createpagPination = function (h) {
-  const { showPage, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
+  const { showPage, pageAlign, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
   if (this.$scopedSlots.page) {
     return this.$scopedSlots.page()
   }
@@ -142,7 +142,7 @@ const createpagPination = function (h) {
         'current-change': handleCurrentChange
       },
       style: {
-        textAlign: 'right'
+        textAlign: pageAlign
       }
     })
   }
@@ -248,6 +248,10 @@ export default {
     sumText: {
       type: String,
       default: '合计'
+    },
+    pageAlign: {
+      type: String,
+      default: 'right'
     }
   },
   inheritAttrs: false,
