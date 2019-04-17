@@ -2,7 +2,9 @@ import createTag from './createTag'
 const defaultWidth = '100px'
 const createRow = function (h) {
   const { columns = [], elRow } = this.data.attrs
-  return h('el-row', elRow, columns.map(column => createCol.call(this, h, column)))
+  return h('el-row', {
+    props: elRow
+  }, columns.map(column => createCol.call(this, h, column)))
 }
 
 const createCol = function (h, column) {
