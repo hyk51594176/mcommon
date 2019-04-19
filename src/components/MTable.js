@@ -1,4 +1,4 @@
-import ExportCsv from '../utils/export-csv'
+import ExportCsv from '@/utils/export-csv'
 import createTag from './createTag'
 const createDefault = function (h, { scope, column, index }) {
   return h('span', null, [createTag.call(this, h, {
