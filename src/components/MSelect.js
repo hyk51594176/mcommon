@@ -1,7 +1,7 @@
 
 import {
   isDiff
-} from '../utils/index'
+} from '@/utils/index'
 export default {
   name: 'MSelect',
   props: {
