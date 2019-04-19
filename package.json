@@ -33,7 +33,7 @@
     "create-banner": "^1.0.0",
     "element-ui": "^2.7.0",
     "node-sass": "^4.11.0",
-    "rollup": "^0.59.1",
+    "rollup": "^0.59.4",
     "rollup-plugin-alias": "^1.5.1",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-uglify": "^3.0.0",
