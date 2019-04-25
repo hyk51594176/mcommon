@@ -59,6 +59,7 @@ const createTable = function (h) {
       props: {
         type: 'expand'
       },
+      key: 'expand',
       scopedSlots: {
         default: this.$scopedSlots.expand ? props => this.$scopedSlots.expand(props) : null
       }
@@ -71,7 +72,8 @@ const createTable = function (h) {
           type: 'selection',
           selectable,
           reserveSelection
-        }
+        },
+        key: 'selection'
       })
     )
   }
@@ -86,6 +88,7 @@ const createTable = function (h) {
           reserveSelection,
           fixed: numFiexd || (columns[0] && columns[0].fixed)
         },
+        key: 'showNum',
         scopedSlots: {
           default: this.$scopedSlots.num ? props => this.$scopedSlots.mnum({ ...props, num: getNum(props) }) : props => getNum(props)
         }
@@ -100,6 +103,7 @@ const createTable = function (h) {
         fixed: buttonFixed,
         label: buttonLabel
       },
+      key: 'button',
       scopedSlots: {
         default: props => this.$scopedSlots.button(props)
       }
@@ -120,7 +124,7 @@ const createTable = function (h) {
     },
     ref: 'commontable',
     on: eventFun
-  }, [].concat(children, this.$children, createTableColumn.call(this, h, columns)))
+  }, [].concat(children, this.$slots.default || [], createTableColumn.call(this, h, columns)))
 }
 
 const createpagPination = function (h) {
