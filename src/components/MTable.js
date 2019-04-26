@@ -128,18 +128,20 @@ const createTable = function (h) {
 }
 
 const createpagPination = function (h) {
-  const { showPage, pageAlign, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange } = this
+  const { showPage, pageAlign, page, pageSizes, layout, cTotal, handleSizeChange, handleCurrentChange, pageOptions = {}, hideOnSinglePage } = this
   if (this.$scopedSlots.page) {
     return this.$scopedSlots.page()
   }
-  if (showPage && cTotal > page.pageSize) {
+  if (showPage) {
     return h('el-pagination', {
       props: {
         currentPage: page.pageNum,
         pageSize: page.pageSize,
         pageSizes,
         layout,
-        total: cTotal
+        total: cTotal,
+        hideOnSinglePage,
+        ...pageOptions
       },
       on: {
         'size-change': handleSizeChange,
@@ -167,6 +169,7 @@ export default {
       type: String,
       default: 'center'
     },
+    pageOptions: Object,
     buttonFixed: {
       type: String,
       default: 'right'
@@ -181,6 +184,10 @@ export default {
       default: 'total,sizes,prev, pager, next, jumper'
     },
     showNum: {
+      type: Boolean,
+      default: true
+    },
+    hideOnSinglePage: {
       type: Boolean,
       default: true
     },
