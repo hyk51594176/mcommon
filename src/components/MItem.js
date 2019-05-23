@@ -1,60 +1,3 @@
-const pickerOptions = {
-  shortcuts: [{
-    text: '今天',
-    onClick (picker) {
-      const end = new Date()
-      const start = new Date()
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '昨天',
-    onClick (picker) {
-      const start = new Date()
-      start.setTime(start.getTime() - 1000 * 60 * 60 * 24)
-      picker.$emit('pick', [start, start])
-    }
-  }, {
-    text: '最近一周',
-    onClick (picker) {
-      const end = new Date()
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近一个月',
-    onClick (picker) {
-      const end = new Date()
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近三个月',
-    onClick (picker) {
-      const end = new Date()
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近六个月',
-    onClick (picker) {
-      const end = new Date()
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 180)
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近一年',
-    onClick (picker) {
-      const end = new Date()
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 365)
-      picker.$emit('pick', [start, end])
-    }
-  }]
-}
 
 const createChildren = (h, el, column, valueKey) => {
   const list = column.dataList || column.list || []
@@ -201,11 +144,6 @@ export default {
       }
       return newObj
     },
-    getpickerOptions (type, flag) {
-      if (type === 'daterange' && flag !== false) {
-        return pickerOptions
-      }
-    },
     currency (value, currency = '¥', decimals = 2) {
       const digitsRE = /(\d{3})(?=\d)/g
       value = parseFloat(value)
@@ -284,18 +222,20 @@ export default {
           }
         }
         let slots = computedColumn.slots || {}
-        let children = Object.keys(slots).map(key => {
+        let children = []
+        let scopedSlots = {}
+        Object.keys(slots).forEach(key => {
           let VNode = null
           if (typeof slots[key] === 'function') {
-            VNode = slots[key](h, { row, column: computedColumn, $index })
+            scopedSlots[key] = slots[key].bind(null, h)
           } else {
             VNode = slots[key]
+            VNode.data = {
+              ...(VNode.data || {}),
+              slot: key
+            }
+            children.push(VNode)
           }
-          VNode.data = {
-            ...(VNode.data || {}),
-            slot: key
-          }
-          return VNode
         })
 
         return h(componentType, {
@@ -308,6 +248,7 @@ export default {
           attrs: {
             placeholder
           },
+          scopedSlots,
           on: listeners
         }, children)
       }
