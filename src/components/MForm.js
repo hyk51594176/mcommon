@@ -8,7 +8,7 @@ const createRow = function (h) {
 }
 
 const createCol = function (h, column) {
-  let xs = { span: 22 }
+  let xs = { span: 24 }
   const { noWrap, model, formData, labelWidth } = this.data.attrs
   if (noWrap !== undefined) {
     xs = {}
