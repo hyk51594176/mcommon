@@ -243,11 +243,10 @@ export default {
             ...computedColumn,
             filterable: true,
             value: modelComputed,
+            options: computedColumn,
             label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : computedColumn.label
           },
-          attrs: {
-            placeholder
-          },
+          attrs: computedColumn,
           scopedSlots,
           on: listeners
         }, children)
