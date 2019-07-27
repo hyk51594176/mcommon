@@ -1,7 +1,7 @@
 import createTag from './createTag'
 const defaultWidth = '100px'
 const createRow = function (h) {
-  const { columns = [], elRow } = this.data.attrs
+  const { columns = [], elRow } = this.props
   return h('el-row', {
     props: elRow
   }, columns.map(column => createCol.call(this, h, column)))
@@ -9,8 +9,8 @@ const createRow = function (h) {
 
 const createCol = function (h, column) {
   let xs = { span: 24 }
-  const { noWrap, model, formData, labelWidth } = this.data.attrs
-  if (noWrap !== undefined) {
+  const { noWrap, model, formData, labelWidth } = this.props
+  if ((noWrap) !== undefined) {
     xs = {}
   }
   return h('el-col', {
@@ -34,18 +34,21 @@ const createCol = function (h, column) {
 export default {
   functional: true,
   name: 'MForm',
+  props: {
+    formData: Object,
+    columns: Array,
+    model: Object,
+    elRow: Object,
+    noWrap: Boolean
+  },
   render (h, context) {
-    if (context.data.attrs.formData) {
-      context.data.attrs.model = context.data.attrs.formData
+    console.log(context)
+    if (context.props.formData) {
+      context.data.attrs.model = context.props.formData
     }
     if (!context.data.attrs.labelWidth) {
       context.data.attrs.labelWidth = defaultWidth
     }
-    if (context.data.attrs) {
-      const VNode = h('el-form', context.data, [createRow.call(context, h)])
-      return VNode
-    } else {
-      return null
-    }
+    return h('el-form', context.data, [createRow.call(context, h)])
   }
 }
