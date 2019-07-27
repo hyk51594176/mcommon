@@ -10,7 +10,7 @@ const createRow = function (h) {
 const createCol = function (h, column) {
   let xs = { span: 24 }
   const { noWrap, model, formData, labelWidth } = this.props
-  if ((noWrap) !== undefined) {
+  if (noWrap) {
     xs = {}
   }
   return h('el-col', {
