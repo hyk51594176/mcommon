@@ -246,7 +246,9 @@ export default {
             options: computedColumn,
             label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : computedColumn.label
           },
-          attrs: computedColumn,
+          attrs: {
+            placeholder
+          },
           scopedSlots,
           on: listeners
         }, children)
