@@ -42,7 +42,6 @@ export default {
     noWrap: Boolean
   },
   render (h, context) {
-    console.log(context)
     if (context.props.formData) {
       context.data.attrs.model = context.props.formData
     }
