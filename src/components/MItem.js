@@ -256,8 +256,10 @@ export default {
     } else {
       const VNode = typeof computedColumn.render === 'function' ? computedColumn.render(h, { row, computedColumn, $index }) : computedColumn.render
       return VNode || h('span', {
+        class: 'item-container',
         style: {
-          'word-break': 'break-all'
+          'word-break': 'break-all',
+          'display': 'inline-block'
         }
       }, computedColumn.format ? computedColumn.format(row) : modelComputed)
     }
