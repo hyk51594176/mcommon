@@ -1,5 +1,7 @@
+import Sortable from 'sortablejs'
 import ExportCsv from '@/utils/export-csv'
 import createTag from './createTag'
+
 const createDefault = function (h, { scope, column, index }) {
   return h('span', null, [createTag.call(this, h, {
     column: this.getColumns(column, scope),
@@ -263,7 +265,8 @@ export default {
     pageAlign: {
       type: String,
       default: 'right'
-    }
+    },
+    drop: Boolean
   },
   inheritAttrs: false,
 
@@ -455,6 +458,18 @@ export default {
       }
 
       return [rowspan, colspan]
+    },
+    rowDrop () {
+      const tbody = document.querySelector('.el-table__body-wrapper tbody')
+      const _this = this
+      Sortable.create(tbody, {
+        onEnd ({ newIndex, oldIndex }) {
+          const copyData = JSON.parse(JSON.stringify(_this.tableData))
+          const currRow = copyData.splice(oldIndex, 1)[0]
+          copyData.splice(newIndex, 0, currRow)
+          _this.$emit('drop', copyData)
+        }
+      })
     }
   },
   render (h) {
@@ -462,5 +477,10 @@ export default {
       createTable.call(this, h),
       createpagPination.call(this, h)
     ])
+  },
+  mounted () {
+    if (this.drop) {
+      this.rowDrop()
+    }
   }
 }
