@@ -467,7 +467,7 @@ export default {
           const copyData = JSON.parse(JSON.stringify(_this.tableData))
           const currRow = copyData.splice(oldIndex, 1)[0]
           copyData.splice(newIndex, 0, currRow)
-          _this.$emit('drop', copyData)
+          _this.$emit('drop-change', copyData)
         }
       })
     }
