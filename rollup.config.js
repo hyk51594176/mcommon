@@ -20,9 +20,15 @@ export default {
     banner,
     file: 'dist/index.js',
     format: 'umd',
-    name: 'mcommon'
+    name: 'mcommon',
+    globals: {
+      'Sortable': 'Sortable'
+    }
   },
   cache: true,
+  external: [
+    'sortablejs'
+  ],
   plugins: [
     alias({
       '@': resolve('src')
