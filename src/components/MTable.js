@@ -460,7 +460,7 @@ export default {
       return [rowspan, colspan]
     },
     rowDrop () {
-      const tbody = document.querySelector('.el-table__body-wrapper tbody')
+      const tbody = this.$el.querySelector('.el-table__body-wrapper tbody')
       const _this = this
       Sortable.create(tbody, {
         onEnd ({ newIndex, oldIndex }) {
