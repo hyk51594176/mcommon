@@ -237,7 +237,6 @@ export default {
             children.push(VNode)
           }
         })
-
         return h(componentType, {
           props: {
             ...computedColumn,
@@ -247,6 +246,7 @@ export default {
             label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : computedColumn.label
           },
           attrs: {
+            ...this.computedColumn,
             placeholder
           },
           scopedSlots,
