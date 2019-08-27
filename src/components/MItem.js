@@ -1,4 +1,4 @@
-
+const attributes = ['maxlength', 'minlenght', 'rows', 'autocomplete', 'name', 'readonly', 'max', 'min', 'step', 'autofocus', 'form']
 const createChildren = (h, el, column, valueKey) => {
   const list = column.dataList || column.list || []
   return list.map(item => {
@@ -207,7 +207,7 @@ export default {
             value: modelComputed,
             customRender: (computedColumn.slots && computedColumn.slots.default) ? computedColumn.slots.default : null
           },
-          attrs: computedColumn,
+          attrs: componentType === 'm-select' ? computedColumn : null,
           on: listeners
         }, children)
       } else {
@@ -237,6 +237,10 @@ export default {
             children.push(VNode)
           }
         })
+        let attrs = attributes.reduce((obj, key) => {
+          if (this.computedColumn[key]) obj[key] = this.computedColumn[key]
+          return obj
+        }, { placeholder })
         return h(componentType, {
           props: {
             ...computedColumn,
@@ -245,10 +249,7 @@ export default {
             columnOptions: computedColumn,
             label: (componentType === 'el-checkbox' || componentType === 'el-radio') ? null : computedColumn.label
           },
-          attrs: {
-            ...this.computedColumn,
-            placeholder
-          },
+          attrs: attrs,
           scopedSlots,
           on: listeners
         }, children)

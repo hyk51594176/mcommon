@@ -11,6 +11,7 @@ const install = function (Vue) {
   Vue.component(MItem.name, MItem)
   Vue.component(MSelect.name, MSelect)
   Vue.component(MTable.name, MTable)
+  install.installed = true
 }
 if (window && window.Vue) {
   install(window.Vue)
