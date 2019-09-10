@@ -76,6 +76,15 @@ mergeColumn|可合并行字段|Array|-
  <<< @/vuepressdocs/.vuepress/components/example/mtable/demo6.vue
 </demo-block>
 
+## 拖拽行
+需要指定row-key, drop为true,drop-change事件会返回顺序变化后的数据
+
+<demo-block>
+<example-mtable-demo7 slot="source"/>
+ <<< @/vuepressdocs/.vuepress/components/example/mtable/demo7.vue
+</demo-block>
+
+
 
  
 
