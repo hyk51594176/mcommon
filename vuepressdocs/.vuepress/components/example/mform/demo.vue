@@ -1,19 +1,19 @@
 <template>
   <div>
     <h3>表单控制</h3>
-    <m-form :model="options" :columns="optionsColumns"></m-form>
+    <m-form :formData="options" :columns="optionsColumns"></m-form>
     <br>
     <h3>表单展示</h3>
     {{formData}}
     <m-form
-      :model="formData"
+      :formData="formData"
       ref="mform"
       :size="options.size"
       no-warp
       :labelPosition="options.labelPosition"
       :columns="columns"
       :disabled="options.disabled"
-      :labelWidth="options.labelWidth+"px""
+      :labelWidth="options.labelWidth+'px'"
     >
       <el-progress type="circle" slot="slot" :percentage="80" color="#8e71c7"></el-progress>
     </m-form>
@@ -108,9 +108,6 @@ export default {
             required: true,
             message: "请输入姓名",
             trigger: "blur"
-          },
-          slots: {
-            append: <el-button>搜索</el-button>
           }
         },
         {
@@ -200,10 +197,6 @@ export default {
           prop: "render",
           render: h => {
             return <el-progress type="circle" percentage={30} />;
-          },
-          rules: {
-            required: true,
-            message: "render字段不能为空"
           }
         },
         {
