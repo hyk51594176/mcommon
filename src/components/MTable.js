@@ -1,4 +1,4 @@
-import Sortable from 'sortablejs'
+// import Sortable from 'sortablejs'
 import ExportCsv from '@/utils/export-csv'
 import createTag from './createTag'
 
@@ -462,7 +462,7 @@ export default {
     rowDrop () {
       const tbody = this.$el.querySelector('.el-table__body-wrapper tbody')
       const _this = this
-      Sortable.create(tbody, {
+      require('sortablejs').create(tbody, {
         onEnd ({ newIndex, oldIndex }) {
           const copyData = JSON.parse(JSON.stringify(_this.tableData))
           const currRow = copyData.splice(oldIndex, 1)[0]
