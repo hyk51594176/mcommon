@@ -1,3 +1,4 @@
+import { currency } from '@/utils/index'
 const attributes = ['maxlength', 'minlenght', 'rows', 'autocomplete', 'name', 'readonly', 'max', 'min', 'step', 'autofocus', 'form']
 const createChildren = (h, el, column, valueKey) => {
   const list = column.dataList || column.list || []
@@ -18,7 +19,6 @@ const createChildren = (h, el, column, valueKey) => {
     }, children)
   })
 }
-
 export default {
   name: 'MItem',
   props: {
@@ -76,7 +76,7 @@ export default {
           this.setRowKey(null)
         }
         if (this.column.type === 'currency' && val) {
-          return this.isForce ? val : this.currency(val, this.column.currency, this.column.decimals)
+          return this.isForce ? val : currency(val, this.column.currency, this.column.decimals)
         }
         return val
       },
@@ -143,28 +143,6 @@ export default {
         }
       }
       return newObj
-    },
-    currency (value, currency = '¥', decimals = 2) {
-      const digitsRE = /(\d{3})(?=\d)/g
-      value = parseFloat(value)
-      if (!isFinite(value) || (!value && value !== 0)) return ''
-      currency = currency != null ? currency : ''
-      decimals = decimals != null ? decimals : 2
-      const stringified = Math.abs(value).toFixed(decimals)
-      const _int = decimals
-        ? stringified.slice(0, -1 - decimals)
-        : stringified
-      const i = _int.length % 3
-      const head = i > 0
-        ? (_int.slice(0, i) + (_int.length > 3 ? ',' : ''))
-        : ''
-      const _float = decimals
-        ? stringified.slice(-1 - decimals)
-        : ''
-      const sign = value < 0 ? '-' : ''
-      return sign + currency + head +
-      _int.slice(i).replace(digitsRE, '$1,') +
-      _float
     }
   },
   render (h) {
@@ -256,13 +234,22 @@ export default {
       }
     } else {
       const VNode = typeof computedColumn.render === 'function' ? computedColumn.render(h, { row, computedColumn, $index }) : computedColumn.render
-      return VNode || h('span', {
-        class: 'item-container',
-        style: {
-          'word-break': 'break-all',
-          'display': 'inline-block'
+      if (VNode) return VNode
+      else {
+        let children = modelComputed
+        if (typeof computedColumn.format === 'function') {
+          children = computedColumn.format(row)
+        } else if (computedColumn.type === 'currency') {
+          children = currency(modelComputed, this.column.currency, this.column.decimals)
         }
-      }, computedColumn.format ? computedColumn.format(row) : modelComputed)
+        return h('span', {
+          class: 'item-container',
+          style: {
+            'word-break': 'break-all',
+            'display': 'inline-block'
+          }
+        }, children)
+      }
     }
   }
 }
