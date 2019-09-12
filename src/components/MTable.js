@@ -1,6 +1,7 @@
 import Sortable from 'sortablejs'
 import ExportCsv from '@/utils/export-csv'
 import createTag from './createTag'
+import { currency } from '@/utils/index'
 
 const createDefault = function (h, { scope, column, index }) {
   return h('span', null, [createTag.call(this, h, {
@@ -399,6 +400,8 @@ export default {
               /\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,
               '$&,'
             )
+          } else if (obj.type === 'currency') {
+            sums[index] = currency(sums[index], obj.currency, obj.decimals)
           }
           if (obj.unit)sums[index] = sums[index] + obj.unit
         }
