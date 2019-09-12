@@ -75,7 +75,7 @@ export default {
         } catch (error) {
           this.setRowKey(null)
         }
-        if (this.column.type === 'currency' && val) {
+        if (this.column.type === 'currency') {
           return this.isForce ? val : currency(val, this.column.currency, this.column.decimals)
         }
         return val
@@ -234,22 +234,11 @@ export default {
       }
     } else {
       const VNode = typeof computedColumn.render === 'function' ? computedColumn.render(h, { row, computedColumn, $index }) : computedColumn.render
-      if (VNode) return VNode
-      else {
-        let children = modelComputed
-        if (typeof computedColumn.format === 'function') {
-          children = computedColumn.format(row)
-        } else if (computedColumn.type === 'currency') {
-          children = currency(modelComputed, this.column.currency, this.column.decimals)
+      return VNode || h('span', {
+        style: {
+          'word-break': 'break-all'
         }
-        return h('span', {
-          class: 'item-container',
-          style: {
-            'word-break': 'break-all',
-            'display': 'inline-block'
-          }
-        }, children)
-      }
+      }, computedColumn.format ? computedColumn.format(row) : modelComputed)
     }
   }
 }
