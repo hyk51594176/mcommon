@@ -1,6 +1,6 @@
 {
   "name": "@hanyk/mcommon",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "mTable,mForm,mItem 基于element-ui 二次封装的table和form组件",
   "main": "dist/index.js",
   "scripts": {
