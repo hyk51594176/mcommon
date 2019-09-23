@@ -4,11 +4,11 @@ import createTag from './createTag'
 import { currency } from '@/utils/index'
 
 const createDefault = function (h, { scope, column, index }) {
-  return h('span', null, [createTag.call(this, h, {
+  return createTag.call(this, h, {
     column: this.getColumns(column, scope),
     row: scope.row,
     $index: scope.$index
-  })])
+  })
 }
 
 const createTableColumn = function (h, columns) {
