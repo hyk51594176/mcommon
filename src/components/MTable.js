@@ -2,18 +2,9 @@ import Sortable from 'sortablejs'
 import ExportCsv from '@/utils/export-csv'
 import createTag from './createTag'
 import { currency } from '@/utils/index'
-
-const createDefault = function (h, { scope, column, index }) {
-  return createTag.call(this, h, {
-    column: this.getColumns(column, scope),
-    row: scope.row,
-    $index: scope.$index
-  })
-}
-
 const createTableColumn = function (h, columns) {
   const { filtetag, getKey } = this
-  return columns.map((column, index) => {
+  return columns.map(column => {
     let children = column.children || []
     return h('el-table-column', {
       props: {
@@ -24,7 +15,11 @@ const createTableColumn = function (h, columns) {
       },
       key: getKey(column.prop),
       scopedSlots: {
-        default: scope => createDefault.call(this, h, { scope, column, index })
+        default: scope => createTag.call(this, h, {
+          column: this.getColumns(column, scope),
+          row: scope.row,
+          $index: scope.$index
+        })
       }
     }, createTableColumn.call(this, h, children))
   })
