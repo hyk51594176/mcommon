@@ -5,7 +5,7 @@ const has = (browser) => {
     if (isIE) {
       const reIE = new RegExp('MSIE (\\d+\\.\\d+);')
       reIE.test(ua)
-      return parseFloat(RegExp['$1'])
+      return parseFloat(RegExp.$1)
     } else {
       return false
     }
@@ -86,6 +86,15 @@ const csv = {
       document.body.removeChild(link)
     }
   },
+  getStrFunction (str, obj) {
+    str = str.replace(/(\.\d)/g, '[$1]').replace(/\.\[/g, '[')
+    const Fn = Function
+    try {
+      return new Fn(`return this.${str}`).call(obj)
+    } catch (error) {
+      return undefined
+    }
+  },
   format (columns, datas, options) {
     options = Object.assign({}, defaults, options)
     const content = []
@@ -93,7 +102,13 @@ const csv = {
     appendLine(content, column, options)
     datas.forEach(row => {
       if (!Array.isArray(row)) {
-        row = columns.map(obj => (typeof row[obj.prop] !== 'undefined' ? row[obj.prop] : ''))
+        row = columns.map(obj => {
+          const data = this.getStrFunction(obj.prop, row)
+          if (typeof obj.format === 'function') {
+            return obj.format(row)
+          }
+          return typeof data !== 'undefined' ? data : ''
+        })
       }
       appendLine(content, row, options)
     })
