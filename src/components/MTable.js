@@ -5,7 +5,7 @@ import { currency } from '@/utils/index'
 const createTableColumn = function (h, columns) {
   const { filtetag, getKey } = this
   return columns.map(column => {
-    let children = column.children || []
+    const children = column.children || []
     return h('el-table-column', {
       props: {
         ...column,
@@ -108,7 +108,7 @@ const createTable = function (h) {
     }))
   }
 
-  let eventFun = { ...$listeners }
+  const eventFun = { ...$listeners }
   if (eventFun.selectionChange)eventFun['selection-change'] = eventFun.selectionChange
   return h('el-table', {
     props: {
@@ -295,7 +295,7 @@ export default {
       return this.mergeRow.reduce((x, y) => {
         let firstIndex
         x[y] = this.list.reduce((l, r, i) => {
-          let obj = {
+          const obj = {
             row: 1,
             [y]: r[y]
           }
@@ -387,8 +387,8 @@ export default {
           }, 0)
         }
         sums[index] = parseFloat(sums[index] || 0).toFixed(2)
-        let prop = column.property
-        let obj = prop ? this.columns.find(obj => obj.prop === prop) : null
+        const prop = column.property
+        const obj = prop ? this.columns.find(obj => obj.prop === prop) : null
         if (obj && sums[index]) {
           if (obj.isCurrency) {
             sums[index] = (sums[index] + '').replace(
@@ -429,7 +429,7 @@ export default {
       }
     },
     arraySpanMethod ({ row, column, rowIndex }) {
-      let arr = column.property ? this.mergeRowData[column.property] : null
+      const arr = column.property ? this.mergeRowData[column.property] : null
 
       let rowspan = 1; let colspan = 1
       if (arr) {
@@ -437,8 +437,8 @@ export default {
       }
       if (this.mergeColumn.length) {
         if (this.mergeColumn.indexOf(column.property) > -1) {
-          let props = this.columns.map(obj => obj.prop)
-          let index = props.indexOf(column.property)
+          const props = this.columns.map(obj => obj.prop)
+          const index = props.indexOf(column.property)
           let canmerge = true
           colspan = props.reduce((x, y, i) => {
             if (i > index && canmerge) {

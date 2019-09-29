@@ -111,12 +111,12 @@ export default {
     },
     setRowKey (value) {
       if (this.computedColumn.prop && this.row) {
-        let path = this.computedColumn.prop.replace(/\[(\w+)\]/g, '.$1').replace(/^\./, '')
-        let arr = path.split('.')
-        let firstKey = arr.shift()
-        let lastIndex = arr.length - 1
+        const path = this.computedColumn.prop.replace(/\[(\w+)\]/g, '.$1').replace(/^\./, '')
+        const arr = path.split('.')
+        const firstKey = arr.shift()
+        const lastIndex = arr.length - 1
         if (lastIndex >= 0) {
-          let emptyObj = this.row[firstKey] || {}
+          const emptyObj = this.row[firstKey] || {}
           const val = arr.reduce((x, y, index) => {
             if (index === lastIndex) {
               x[y] = value
@@ -132,9 +132,9 @@ export default {
       }
     },
     getParams () {
-      let newObj = {}
+      const newObj = {}
       if (this.computedColumn.params && typeof this.computedColumn.params === 'object') {
-        for (let key in this.computedColumn.params) {
+        for (const key in this.computedColumn.params) {
           let value
           try {
             value = this.getStrFunction(`this.row.${this.computedColumn.params[key]}`)
@@ -150,7 +150,7 @@ export default {
     if (componentType) {
       const placeholder = computedColumn.placeholder !== undefined
         ? computedColumn.placeholder : computedColumn.label
-      let listeners = {
+      const listeners = {
         ...(computedColumn.listeners || {}),
         input: (val) => {
           if (componentType === 'el-input') {
@@ -164,13 +164,13 @@ export default {
       if (computedColumn.listeners && computedColumn.listeners.currentObj) {
         listeners.currentObj = data => computedColumn.listeners.currentObj(data, row, $index)
       }
-      let arr = ['m-select', 'el-checkbox-group', 'el-radio-group']
+      const arr = ['m-select', 'el-checkbox-group', 'el-radio-group']
       if (arr.includes(componentType)) {
         let str = ''
         if (computedColumn.type === 'button') {
           str = '-button'
         }
-        let children = componentType !== 'm-select'
+        const children = componentType !== 'm-select'
           ? createChildren(
             h,
             componentType === 'el-checkbox-group' ? `el-checkbox${str}` : `el-radio${str}`,
@@ -199,9 +199,9 @@ export default {
             computedColumn.listeners && computedColumn.listeners.focus && computedColumn.listeners.focus(...args)
           }
         }
-        let slots = computedColumn.slots || {}
-        let children = []
-        let scopedSlots = {}
+        const slots = computedColumn.slots || {}
+        const children = []
+        const scopedSlots = {}
         Object.keys(slots).forEach(key => {
           let VNode = null
           if (typeof slots[key] === 'function') {
@@ -215,7 +215,7 @@ export default {
             children.push(VNode)
           }
         })
-        let attrs = attributes.reduce((obj, key) => {
+        const attrs = attributes.reduce((obj, key) => {
           if (this.computedColumn[key]) obj[key] = this.computedColumn[key]
           return obj
         }, { placeholder })

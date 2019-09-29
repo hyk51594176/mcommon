@@ -110,7 +110,7 @@ export default {
     pageInit () {
       const arr = Object.keys(this.params)
       if (arr.length) {
-        let flag = arr.some(o => this.params[o] === null)
+        const flag = arr.some(o => this.params[o] === null)
         if (flag && !this.nullRequest) return
       }
       this.getData()
@@ -118,7 +118,7 @@ export default {
     getCurrentObj () {
       if (!this.list.length) return
       let currentObj = null
-      let key = this.valueKey.value
+      const key = this.valueKey.value
       if (!this.multiple) {
         if (!this.currentValue) {
           currentObj = {}
@@ -128,7 +128,7 @@ export default {
       } else {
         currentObj = []
         this.currentValue.forEach(id => {
-          let obj = this.list.find(obj => obj[key] === id)
+          const obj = this.list.find(obj => obj[key] === id)
           if (obj) currentObj.push(obj)
         })
       }
@@ -144,7 +144,7 @@ export default {
       if (!this.getList) return
       this.loading = true
       this.getList({ ...this.params, ...otherData }, this.showMsg).then((res) => {
-        let data = Array.isArray(res) ? res : (res.data || [])
+        const data = Array.isArray(res) ? res : (res.data || [])
         this.list = data
         this.$emit('selectList', this.list)
         this.loading = false
@@ -158,7 +158,7 @@ export default {
   },
   render (h) {
     const { list, valueKey, multiple, loading, currentValue, remoteMethod, $attrs, $listeners, customRender } = this
-    let listeners = {
+    const listeners = {
       ...$listeners,
       clear: remoteMethod,
       input: (val) => {
@@ -166,7 +166,7 @@ export default {
         $listeners.input && $listeners.input(val)
       }
     }
-    let options = {
+    const options = {
       ...$attrs
     }
     delete options.valueKey
