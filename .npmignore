@@ -2,6 +2,5 @@ node_modules
 rollup.config.js
 .babelrc
 .vscode
-.src
 /docs/
 /vuepressdocs/
