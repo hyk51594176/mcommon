@@ -297,9 +297,9 @@ export default {
         x[y] = this.list.reduce((l, r, i) => {
           const obj = {
             row: 1,
-            [y]: r[y]
+            [y]: this.getPropValue(r,y)
           }
-          if (i !== 0 && this.getPropValue(r,y) ===  this.getPropValue(l[i - 1],y)) {
+          if (i !== 0 && this.getPropValue(r,y) ===  l[i - 1][y]) {
             obj.row = 0
             l[firstIndex].row += 1
           } else {
@@ -438,8 +438,7 @@ export default {
       }
     },
     arraySpanMethod ({ row, column, rowIndex }) {
-      const arr = column.property ? this.getPropValue(this.mergeRowData,column.property) : null
-
+      const arr = column.property ? this.mergeRowData[column.property] : null
       let rowspan = 1; let colspan = 1
       if (arr) {
         rowspan = arr[rowIndex].row
