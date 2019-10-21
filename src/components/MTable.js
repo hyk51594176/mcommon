@@ -421,11 +421,20 @@ export default {
     clearSelection () {
       this.$refs.commontable.clearSelection()
     },
+    getPropValue (row,str) {
+      str = str.replace(/(\.\d)/g, '[$1]').replace(/\.\[/g, '[')
+      const Fn = Function
+      try {
+        return new Fn(`return this.${str}`).call(row)
+      } catch (error) {
+        return null
+      }
+    },
     filtetag (column, value, row) {
       if (typeof column.filterMethod === 'function') {
         return column.filterMethod(column, value, row)
       } else {
-        return row[column.prop] === value
+        return this.getPropValue(row,column.prop) === value
       }
     },
     arraySpanMethod ({ row, column, rowIndex }) {
@@ -442,7 +451,7 @@ export default {
           let canmerge = true
           colspan = props.reduce((x, y, i) => {
             if (i > index && canmerge) {
-              if (row[y] === undefined) {
+              if (this.getPropValue(row,y) === undefined) {
                 x += 1
               } else {
                 canmerge = false
@@ -450,7 +459,7 @@ export default {
             }
             return x
           }, 1)
-        } else if (column.property && row[column.property] === undefined) {
+        } else if (column.property &&  this.getPropValue(row,column.property) === undefined) {
           colspan = 0
         }
       }
