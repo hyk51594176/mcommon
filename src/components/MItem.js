@@ -207,12 +207,9 @@ export default {
           if (typeof slots[key] === 'function') {
             scopedSlots[key] = slots[key].bind(null, h)
           } else {
-            VNode = slots[key]
-            VNode.data = {
-              ...(VNode.data || {}),
+            children.push(h('template', {
               slot: key
-            }
-            children.push(VNode)
+            }, [slots[key]]))
           }
         })
         const attrs = attributes.reduce((obj, key) => {
