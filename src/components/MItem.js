@@ -81,17 +81,12 @@ export default {
         return val
       },
       set (value) {
-        if (this.computedColumn.rules) {
-          let isNumber = false
-          if (Array.isArray(this.computedColumn.rules)) {
-            isNumber = this.computedColumn.rules.some(obj => obj.type === 'number')
-          } else {
-            isNumber = this.computedColumn.rules.type === 'number'
+        const { type } = this.computedColumn
+        if (type === 'currency' || type === 'number') {
+          const reg = /^-?[0-9]*\.?\d*$/g
+          if (!reg.test(value)) {
+            value = value.substr(0, value.length - 1)
           }
-          if (isNumber && !isNaN(value) && this.componentType === 'el-input') value = Number(value)
-        }
-        if (this.computedColumn.type === 'currency') {
-          isNaN(value) ? (value = 0) : (value = Number(value))
         }
         try {
           if (this.getStrFunction(`this.row.${this.computedColumn.prop}`) === undefined) {
