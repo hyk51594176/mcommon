@@ -1,4 +1,4 @@
-const has = (browser) => {
+const has = browser => {
   const ua = navigator.userAgent
   if (browser === 'ie') {
     const isIE = ua.indexOf('compatible') > -1 && ua.indexOf('MSIE') > -1
@@ -30,9 +30,9 @@ const defaults = {
   quoted: false
 }
 const csv = {
-  _isIE11 () {
+  _isIE11() {
     let iev = 0
-    const ieold = (/MSIE (\d+\.\d+);/.test(navigator.userAgent))
+    const ieold = /MSIE (\d+\.\d+);/.test(navigator.userAgent)
     const trident = !!navigator.userAgent.match(/Trident\/7.0/)
     const rv = navigator.userAgent.indexOf('rv:11.0')
 
@@ -49,11 +49,11 @@ const csv = {
     return iev === 11
   },
 
-  _isEdge () {
+  _isEdge() {
     return /Edge/.test(navigator.userAgent)
   },
 
-  _getDownloadUrl (text) {
+  _getDownloadUrl(text) {
     const BOM = '\uFEFF'
     // Add BOM to text for open in excel correctly
     if (window.Blob && window.URL && window.URL.createObjectURL) {
@@ -64,7 +64,7 @@ const csv = {
     }
   },
 
-  download (filename, text) {
+  download(filename, text) {
     if (has('ie') && has('ie') < 10) {
       // has module unable identify ie11 and Edge
       const oWin = window.top.open('about:blank', '_blank')
@@ -86,7 +86,7 @@ const csv = {
       document.body.removeChild(link)
     }
   },
-  getStrFunction (str, obj) {
+  getStrFunction(str, obj) {
     str = str.replace(/(\.\d)/g, '[$1]').replace(/\.\[/g, '[')
     const Fn = Function
     try {
@@ -95,7 +95,7 @@ const csv = {
       return undefined
     }
   },
-  format (columns, datas, options) {
+  format(columns, datas, options) {
     options = Object.assign({}, defaults, options)
     const content = []
     const column = columns.map(v => v.label)
@@ -103,11 +103,14 @@ const csv = {
     datas.forEach(row => {
       if (!Array.isArray(row)) {
         row = columns.map(obj => {
-          const data = this.getStrFunction(obj.prop, row)
+          let text
           if (typeof obj.format === 'function') {
-            return obj.format(row)
+            text = obj.format(row)
+          } else {
+            text = this.getStrFunction(obj.prop, row)
           }
-          return typeof data !== 'undefined' ? data : ''
+          text = typeof text !== 'undefined' ? text : ''
+          return `\t${text}`.replace(/,/g, '，')
         })
       }
       appendLine(content, row, options)
