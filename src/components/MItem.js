@@ -81,12 +81,15 @@ export default {
         return val
       },
       set (value) {
-        const { type } = this.computedColumn
+        const { type, trim } = this.computedColumn
         if (type === 'currency' || type === 'number') {
           const reg = /^-?[0-9]*\.?\d*$/g
           if (!reg.test(value)) {
             value = value.substr(0, value.length - 1)
           }
+        }
+        if (trim && this.componentType === 'el-input') {
+          value = value.trim()
         }
         try {
           if (this.getStrFunction(`this.row.${this.computedColumn.prop}`) === undefined) {
@@ -141,18 +144,14 @@ export default {
     }
   },
   render (h) {
-    const { row, $index, computedColumn, modelComputed, componentType, valueKey, getParams } = this
+    const { row, column, $index, computedColumn, modelComputed, componentType, valueKey, getParams } = this
     if (componentType) {
       const placeholder = computedColumn.placeholder !== undefined
         ? computedColumn.placeholder : computedColumn.label
       const listeners = {
         ...(computedColumn.listeners || {}),
         input: (val) => {
-          if (componentType === 'el-input') {
-            this.modelComputed = val.trim()
-          } else {
-            this.modelComputed = val
-          }
+          this.modelComputed = val
           computedColumn.listeners && computedColumn.listeners.input && computedColumn.listeners.input(val)
         }
       }
@@ -198,7 +197,6 @@ export default {
         const children = []
         const scopedSlots = {}
         Object.keys(slots).forEach(key => {
-          let VNode = null
           if (typeof slots[key] === 'function') {
             scopedSlots[key] = slots[key].bind(null, h)
           } else {
