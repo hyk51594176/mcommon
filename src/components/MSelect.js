@@ -68,7 +68,7 @@ export default {
   created () {
     this.setCurrentValue()
     if (this.dataList) {
-      this.list = this.dataList || []
+      this.list = this.dataList
       if(this.currentValue) this.getCurrentObj()
     } else {
       this.pageInit()
