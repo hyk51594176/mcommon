@@ -69,10 +69,8 @@ export default {
     this.setCurrentValue()
     if (this.dataList) {
       this.list = this.dataList || []
-      return
-    }
-    if (this.dataList && this.currentValue) this.getCurrentObj()
-    if (this.params) {
+      if(this.currentValue) this.getCurrentObj()
+    } else {
       this.pageInit()
     }
   },
