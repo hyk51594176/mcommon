@@ -1,7 +1,7 @@
 import Sortable from 'sortablejs'
-import ExportCsv from '@/utils/export-csv'
+import ExportCsv from '../utils/export-csv'
 import createTag from './createTag'
-import { currency } from '@/utils/index'
+import { currency } from '../utils/index'
 const createTableColumn = function (h, columns) {
   const { filtetag, getKey } = this
   return columns.map(column => {
