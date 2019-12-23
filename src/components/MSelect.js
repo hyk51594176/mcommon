@@ -175,12 +175,14 @@ export default {
     } = this;
     const listeners = {
       ...$listeners,
-      clear: remoteMethod,
       input: val => {
         this.currentValue = val;
         $listeners.input && $listeners.input(val);
       }
     };
+    if (this.remote && !listeners.clear) {
+      listeners.clear = remoteMethod;
+    }
     const options = {
       ...$attrs
     };
