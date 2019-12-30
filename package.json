@@ -50,5 +50,13 @@
   },
   "dependencies": {
     "sortablejs": "^1.10.0-rc3"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "printWidth": 180,
+    "useTabs": false,
+    "tabWidth": 2,
+    "bracketSpacing": true
   }
 }
