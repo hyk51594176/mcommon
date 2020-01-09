@@ -89,9 +89,13 @@ export default {
             this.currentValue !== undefined &&
             this.currentValue !== '' &&
             !this.list.some(obj => obj[this.valueKey.value] === this.currentValue) &&
+            !this.notClear &&
             (this.currentValue = null)
         } else {
-          this.currentValue && this.currentValue.length && (this.currentValue = this.currentValue.filter(id => this.list.some(obj => obj[this.valueKey.value] === id)))
+          this.currentValue &&
+            this.currentValue.length &&
+            !this.notClear &&
+            (this.currentValue = this.currentValue.filter(id => this.list.some(obj => obj[this.valueKey.value] === id)))
         }
       } else {
         if (this.notClear) return
