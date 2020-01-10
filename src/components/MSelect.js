@@ -52,8 +52,10 @@ export default {
     dataList(val) {
       this.list = val
     },
-    list(val) {
-      this.changeCurrentValue()
+    list(val, oldval) {
+      if (oldval && oldval.length && !this.notClear) {
+        this.changeCurrentValue()
+      }
       const checkedItem = val.filter(item => item.checked)
       if (!checkedItem.length || this.currentValue || (Array.isArray(this.currentValue) && this.currentValue.length)) return
       if (this.multiple) {
@@ -83,7 +85,6 @@ export default {
       } else this.currentValue = this.value
     },
     changeCurrentValue() {
-      if (this.notClear) return
       if (this.list.length) {
         if (!this.multiple) {
           this.currentValue !== null &&
