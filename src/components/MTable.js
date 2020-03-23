@@ -295,11 +295,12 @@ export default {
       return this.mergeRow.reduce((x, y) => {
         let firstIndex
         x[y] = this.list.reduce((l, r, i) => {
+          const item = this.getPropValue(r,y)
           const obj = {
             row: 1,
-            [y]: this.getPropValue(r,y)
+            [y]: item
           }
-          if (i !== 0 && this.getPropValue(r,y) ===  l[i - 1][y]) {
+          if (i !== 0 && item && item ===  l[i - 1][y]) {
             obj.row = 0
             l[firstIndex].row += 1
           } else {
