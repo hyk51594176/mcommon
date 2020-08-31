@@ -226,8 +226,8 @@ export default {
           componentType,
           {
             props: {
-              ...computedColumn,
               filterable: true,
+              ...computedColumn,
               value: modelComputed,
               columnOptions: computedColumn,
               label: componentType === 'el-checkbox' || componentType === 'el-radio' ? null : computedColumn.label
