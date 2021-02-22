@@ -25,7 +25,8 @@ export default {
     return {
       options: {
         size: "small",
-        labelWidth: 100
+        labelWidth: 100,
+        checkboxGroup:['a']
       },
       formData: {
         state: "默认渲染span,性别选中男不显示该字段",
@@ -90,7 +91,34 @@ export default {
           prop: "labelWidth",
           el: "input-number",
           min: 0
-        }
+        },
+          {
+              label: "复选框",
+              el: "checkbox-group",
+              prop: "checkboxGroup",
+              disabled:false,
+              span: 30,
+              dataList: [
+                  {
+                      label: "复选框 A",
+                      value: "a",
+                      disabled:true
+                  },
+                  {
+                      label: "复选框 B",
+                      value: "b"
+                  },
+                  {
+                      label: "复选框 c",
+                      value: "c",
+                      disabled:true
+                  },
+                  {
+                      label: "复选框 D",
+                      value: "d"
+                  }
+              ]
+          }
       ]
     };
   },

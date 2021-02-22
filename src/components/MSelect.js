@@ -176,6 +176,7 @@ export default {
           loadingText: '加载中',
           filterable: true,
           clearable: true,
+          remote: remote || false,
           remoteMethod: remote ? remoteMethod : undefined,
           multiple: multiple,
           ...options
