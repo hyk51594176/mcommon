@@ -15,7 +15,8 @@ const createChildren = (h, el, column, valueKey) => {
       {
         props: {
           ...column,
-          label: column.props ? item[column.props.value] : item[valueKey.value]
+          label: column.props ? item[column.props.value] : item[valueKey.value],
+          disabled : item.disabled || false
         },
         key: item[valueKey.label]
       },
