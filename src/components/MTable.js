@@ -406,6 +406,7 @@ export default {
     },
     handleSizeChange (val) {
       this.page.pageSize = val
+      if (this.page.pageNum > Math.ceil(this.page.total / val)) return
       this.$emit('pageChange', this.page)
     },
     handleCurrentChange (val) {
