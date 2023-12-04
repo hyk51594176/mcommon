@@ -2,7 +2,7 @@ import MForm from './components/MForm'
 import MItem from './components/MItem'
 import MSelect from './components/MSelect'
 import MTable from './components/MTable'
-const install = function (Vue) {
+const install = function(Vue) {
   if (install.installed) return
   if (!Vue.prototype.$ELEMENT) {
     throw new Error('请先安装element-ui')
