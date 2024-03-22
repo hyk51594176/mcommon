@@ -40,10 +40,10 @@
     "rollup-plugin-uglify": "^3.0.0",
     "sass-loader": "^7.1.0",
     "vuepress": "^0.14.10",
-    "webpack-dev-middleware": "3.6.0"
+    "webpack-dev-middleware": "5.3.4"
   },
   "resolutions": {
-    "webpack-dev-middleware": "3.6.0"
+    "webpack-dev-middleware": "5.3.4"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
